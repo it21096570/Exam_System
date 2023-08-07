@@ -4,7 +4,7 @@ const { Answers } = require("../models");
 const { validateToken } = require("../middlewares/AuthMiddleware");
 
 
-router.get("/", async (req, res) => {
+router.get("/", validateToken, async (req, res) => {
     const answerList = await Answers.findAll();
     res.json(answerList);
 });

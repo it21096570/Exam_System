@@ -4,7 +4,7 @@ const { Questions } = require("../models");
 const { validateToken } = require("../middlewares/AuthMiddleware");
 
 
-router.get("/", async (req, res) => {
+router.get("/", validateToken, async (req, res) => {
     const questionList = await Questions.findAll();
     res.json(questionList);
 });
