@@ -9,7 +9,14 @@ function Login() {
     const login = () => {
         const data = { username: username, password: password };
         axios.post("http://localhost:5001/user/login", data).then((response) => {
-            console.log(response);
+            if (response.data.error) {
+                alert(response.data.error);
+            }
+
+            else {
+
+                sessionStorage.setItem("access_token", response.data);
+            }
         });
     }
 

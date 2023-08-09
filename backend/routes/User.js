@@ -28,22 +28,33 @@ router.post("/", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-    const {username, password} = req.body;
+    const { username, password } = req.body;
 
-    const user = await User.findOne({where: {username: username}});
+    try {
+        const user = await User.findOne({ where: { username: username } });
 
-    if(!user) res.json({erorr: "User Not Found"});
+        if (!user) {
+            res.json({ error: "User Not Found" });
+            return;
+        }
 
-    bcrypt.compare(password, user.password).then((match) => {
-        if(!match) res.json({ erorr: "Wrong Username or Password"});
+        bcrypt.compare(password, user.password).then((match) => {
+            if (!match) {
+                res.json({ error: "Wrong Username or Password" });
+                return;
+            }
 
-        const accessToken = sign({ username: user.username, nic: user.nic},
-            "important"
-            );
+            const accessToken = sign({ username: user.username, nic: user.nic }, "important");
 
-        res.json(accessToken);
-    });
+            res.json(accessToken);
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
 });
+
+
 
 
 
