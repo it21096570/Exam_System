@@ -1,70 +1,89 @@
 import React, { useState } from 'react';
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from 'yup';
 import axios from 'axios';
 
 function Register() {
-  const [nic, setNIC] = useState('');
-  const [name, setName] = useState('');
-  const [role, setRole] = useState('');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const initialValues = {
+    nic: "",
+    name: "",
+    role: "",
+    username: "",
+    password: "",
+  };
 
-    if (!nic || !name || !role || !username || !password) {
-      setError('All fields are required');
-      return;
-    }
+  const validationSchema = Yup.object().shape({
+    nic: Yup.number().required(),
+    name: Yup.string().required(),
+    role: Yup.string().required(),
+    username: Yup.string().required(),
+    password: Yup.string().required(),
+  })
 
-    setError('');
-
-    const formData = {
-      nic,
-      name,
-      role,
-      username,
-      password
-    };
-
-    try {
-      const response = await axios.post('/', formData);
-      console.log('Registration successful:', response.data);
-      // Handle success or redirect to a success page
-    } catch (error) {
-      console.error('Registration failed:', error);
-      setError('Registration failed. Please try again.');
-    }
+  const onSubmit = (data) => {
+    axios.post("http://localhost:5001/user", data).then((response) => {
+      console.log("IT WORKED");
+    });
   };
 
   return (
-    <div>
-      <h2>Register</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>NIC:</label>
-          <input type="text" value={nic} onChange={(e) => setNIC(e.target.value)} />
-        </div>
-        <div>
-          <label>Name:</label>
-          <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-        </div>
-        <div>
-          <label>Role:</label>
-          <input type="text" value={role} onChange={(e) => setRole(e.target.value)} />
-        </div>
-        <div>
-          <label>Username:</label>
-          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        </div>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        <button type="submit">Register</button>
-      </form>
+    <div className='userRegister'>
+
+      <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
+
+        <Form className="formContainer">
+
+          <label>NIC: </label>
+          <ErrorMessage name="nic" component="span" />
+          <Field
+            autocomplete="off"
+            id="inputUser"
+            name="nic"
+            placeholder="(NIC)"
+          />
+          <label>Name: </label>
+          <ErrorMessage name="name" component="span" />
+          <Field
+            autocomplete="off"
+            id="inputUser"
+            name="name"
+            placeholder="(Name)"
+          />
+          <label>Role: </label>
+          <ErrorMessage name="role" component="span" />
+          <Field
+            autocomplete="off"
+            id="inputUser"
+            name="role"
+            placeholder="(Role)"
+          />
+          <label>Username: </label>
+          <ErrorMessage name="username" component="span" />
+          <Field
+            autocomplete="off"
+            id="inputUser"
+            name="username"
+            placeholder="(Username)"
+          />
+          <label>Password: </label>
+          <ErrorMessage name="password" component="span" />
+          <Field
+            type="password"
+            autocomplete="off"
+            id="inputUser"
+            name="password"
+            placeholder="(Password)"
+          />
+
+          <button type="submit">Register</button>
+
+        </Form>
+
+      </Formik>
+
     </div>
+
   );
 }
 

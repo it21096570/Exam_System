@@ -6,9 +6,9 @@ function Temp() {
     return (
         <div className='userRegister'>
 
-            <Formik initialValues={ } onSubmit={ } validationSchema={ }>
+            <Formik>
 
-                <Form>
+                <Form className="formContainer">
 
                     <label>NIC: </label>
                     <ErrorMessage name="nic" component="span" />
