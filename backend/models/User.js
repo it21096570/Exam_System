@@ -2,7 +2,7 @@ module.exports = (sequelize, DataTypes) => {
     const User = sequelize.define("User", {
 
         nic: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING(20),
             allowNull: false,
             primaryKey: true,
         },

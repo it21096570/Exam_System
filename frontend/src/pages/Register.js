@@ -22,9 +22,17 @@ function Register() {
   })
 
   const onSubmit = (data) => {
-    axios.post("http://localhost:5001/user", data).then((response) => {
-      console.log("IT WORKED");
-    });
+    axios.post("http://localhost:5001/user", data)
+      .then((response) => {
+        //console.log("IT WORKED");
+        console.log("Role:", response.data.role);
+
+        alert("Success: User Added successfully!");
+        window.location.reload(); // Refresh the page
+      })
+      .catch((error) => {
+        console.error("An error occurred:", error);
+      });
   };
 
   return (

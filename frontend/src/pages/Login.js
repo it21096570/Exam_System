@@ -1,40 +1,41 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { BrowserRouter as Router, Link, Switch, Route } from "react-router-dom";
 
 function Login() {
-    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleEmailChange = (e) => {
-        setEmail(e.target.value);
-    }
-
-    const handlePasswordChange = (e) => {
-        setPassword(e.target.value);
-    }
-
-    const handleLogin = (e) => {
-        e.preventDefault();
-        // Add your login logic here
+    const login = () => {
+        const data = { username: username, password: password };
+        axios.post("http://localhost:5001/user/login", data).then((response) => {
+            console.log(response);
+        });
     }
 
     return (
-        <div>
-            <h2>Login</h2>
-            <form onSubmit={handleLogin}>
-                <div>
-                    <label>Email:</label>
-                    <input type="email" value={email} onChange={handleEmailChange} />
-                </div>
-                <div>
-                    <label>Password:</label>
-                    <input type="password" value={password} onChange={handlePasswordChange} />
-                </div>
-                <button type="submit">Login</button>
-            </form>
-            <p>Don't have an account? <Link to="/register">Register</Link></p>
+        <div className="loginContainer">
+            <label htmlFor="username">Username:</label>
+            <input
+                type="text"
+                id="username"
+                onChange={(event) => {
+                    setUsername(event.target.value);
+                }}
+            />
+            <label htmlFor="password">Password:</label>
+            <input
+                type="password"
+                id="password"
+                onChange={(event) => {
+                    setPassword(event.target.value);
+                }}
+            />
+            <button onClick={login}>Login</button>
         </div>
     );
+
+
 }
 
 export default Login;

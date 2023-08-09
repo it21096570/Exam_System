@@ -49,3 +49,46 @@ span {
   color: red;
 }
 
+.loginContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+}
+
+.loginContainer label {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.loginContainer input {
+  width: 250px;
+  height: 40px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+  margin: 5px 0;
+  transition: border-color 0.3s ease;
+}
+
+.loginContainer input:focus {
+  outline: none;
+  border-color: dodgerblue;
+}
+
+.loginContainer button {
+  width: 150px;
+  height: 40px;
+  background-color: dodgerblue;
+  color: white;
+  border: 2px solid dodgerblue;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.loginContainer button:hover {
+  background-color: #0074cc;
+}

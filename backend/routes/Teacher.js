@@ -3,7 +3,7 @@ const router = express.Router();
 const { Teacher } = require("../models");
 const { validateToken } = require("../middlewares/AuthMiddleware");
 
-router.get("/", validateToken, async (req, res) => {
+router.get("/",  validateToken, async (req, res) => {
     const studentList = await Teacher.findAll();
     res.json(studentList);
 });

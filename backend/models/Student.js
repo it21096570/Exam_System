@@ -10,12 +10,8 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(45),
             defaultValue: null,
         },
-        age: {
-            type: DataTypes.STRING(45),
-            defaultValue: null,
-        },
         nic: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING(20),
             defaultValue: null,
         },
 

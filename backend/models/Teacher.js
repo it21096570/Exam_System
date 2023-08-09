@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: null,
         },
         nic: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING(20),
             defaultValue: null,
         },
 
