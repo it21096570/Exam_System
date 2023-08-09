@@ -12,18 +12,15 @@ function App() {
         <nav>
           <ul>
             <li>
-              <Link to="/home">Home</Link>
-              <Link to="/register">Home</Link>
-
-            </li>
-            <li>
+              <Link to="/home">Home</Link> <br />
+              <Link to="/register">Register</Link>
             </li>
           </ul>
         </nav>
         <Switch>
-          <Route path="/"  component={Login} />
-          <Route path="/home"  component={Home} />
+          <Route path="/home" component={Home} />
           <Route path="/register" component={Register} />
+          <Route path="/" component={Login} />
         </Switch>
       </Router>
     </div>
