@@ -4,6 +4,8 @@ import "./App.css";
 import Home from "./pages/Home";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
+import StudentHome from "./pages/StudentHome";
+import TeacherHome from "./pages/TeacherHome";
 
 function App() {
   return (
@@ -14,12 +16,15 @@ function App() {
             <li>
               <Link to="/home">Home</Link> <br />
               <Link to="/register">Register</Link>
+              <Link to="/">Login</Link>
             </li>
           </ul>
         </nav>
         <Switch>
           <Route path="/home" component={Home} />
           <Route path="/register" component={Register} />
+          <Route path="/studenthome" component={StudentHome} />
+          <Route path="/teacherhome" component={TeacherHome} />
           <Route path="/" component={Login} />
         </Switch>
       </Router>

@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { User } = require("../models");
 const bcrypt = require("bcrypt");
-const {sign} = require("jsonwebtoken");
+const { sign } = require("jsonwebtoken");
 const { validateToken } = require("../middlewares/AuthMiddleware");
 
 
@@ -12,9 +12,9 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-    const {nic, name, role, username, password} = req.body;
+    const { nic, name, role, username, password } = req.body;
     console.log(password)
-    bcrypt.hash(password,10).then((hash) => {
+    bcrypt.hash(password, 10).then((hash) => {
         User.create({
             nic: nic,
             name: name,
@@ -24,7 +24,7 @@ router.post("/", async (req, res) => {
         });
     });
     res.json('success')
-    
+
 });
 
 router.post("/login", async (req, res) => {
@@ -44,9 +44,9 @@ router.post("/login", async (req, res) => {
                 return;
             }
 
-            const accessToken = sign({ username: user.username, nic: user.nic }, "important");
+            const accessToken = sign({ username: user.username, role: user.role }, "important");
 
-            res.json(accessToken);
+            res.json({ accessToken, role: user.role });
         });
     } catch (error) {
         console.error(error);
