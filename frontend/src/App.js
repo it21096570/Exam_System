@@ -8,6 +8,7 @@ import StudentHome from "./pages/StudentHome";
 import TeacherHome from "./pages/TeacherHome";
 import ViewExam from "./pages/ViewExam";
 import AddExam from "./pages/AddExam";
+import AddQuestion from "./pages/AddQuestion";
 
 
 
@@ -31,6 +32,7 @@ function App() {
           <Route path="/teacherhome" component={TeacherHome} />
           <Route path="/viewexam" component={ViewExam} />
           <Route path="/addexam" component={AddExam} />
+          <Route path="/addquestion" component={AddQuestion} />
           <Route path="/" component={Login} />
         </Switch>
       </Router>

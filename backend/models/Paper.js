@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true,
+            autoIncrement: true,
         },
         subject: {
             type: DataTypes.STRING(45),
@@ -20,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: null,
         },
         duration: {
-            type: DataTypes.DATE,
+            type: DataTypes.STRING(45),
             defaultValue: null,
         },
         status: {

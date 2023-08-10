@@ -24,8 +24,22 @@ function Register() {
   const onSubmit = (data) => {
     axios.post("http://localhost:5001/user", data)
       .then((response) => {
-        //console.log("IT WORKED");
+        console.log("IT WORKED");
+        console.log(response);
         console.log("Role:", response.data.role);
+
+        if(response.data.role === "teacher" || response.data.role === "Teacher") {
+
+          const teacherData = {
+            nic: data.nic,
+            name: data.name,
+          };
+          
+          axios.post("http://localhost:5001/teacher", teacherData).then((response) => {
+            console.log("Teacher add WORKED");
+          })
+
+        }
 
         alert("Success: User Added successfully!");
         window.location.reload(); // Refresh the page
