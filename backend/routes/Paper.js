@@ -4,7 +4,7 @@ const { Paper } = require("../models");
 const { validateToken } = require("../middlewares/AuthMiddleware");
 
 
-router.get("/", validateToken, async (req, res) => {
+router.get("/", /* validateToken, */ async (req, res) => {
     const paperList = await Paper.findAll();
     res.json(paperList);
 });
