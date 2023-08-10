@@ -92,3 +92,55 @@ span {
 .loginContainer button:hover {
   background-color: #0074cc;
 }
+
+/* Styling for the entire ViewExam component */
+.view-exam-container {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+/* Styling for the top bar */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Styling for the search bar */
+.search-bar input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Styling for the new exam button */
+.new-exam-button button {
+  background-color: lightskyblue;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  color: white;
+  cursor: pointer;
+}
+
+.new-exam-button button:hover {
+  background-color: dodgerblue;
+}
+
+/* Styling for the exam table */
+.exam-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.exam-table th,
+.exam-table td {
+  padding: 8px;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+/* Optional: Add more styles as needed */

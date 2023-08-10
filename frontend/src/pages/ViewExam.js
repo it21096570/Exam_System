@@ -1,8 +1,7 @@
-
-
-
+import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+
 
 function ViewExam() {
     const [paperList, setPaperList] = useState([]);
@@ -10,22 +9,28 @@ function ViewExam() {
     useEffect(() => {
         // Fetch paper data
         axios.get('http://localhost:5001/paper')
-        .then(response => {
-            console.log('Response:', response.data);
-            setPaperList(response.data);
-        })
-        .catch(error => {
-            console.error('Error fetching paper data:', error);
-        });
+            .then(response => {
+                console.log('Response:', response.data);
+                setPaperList(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching paper data:', error);
+            });
     }, []);
 
     return (
-        <div>
-            <div>
-                <input type="text" placeholder="Search" />
-                <button>New Exam</button>
+        <div className="view-exam-container">
+            <div className="top-bar">
+                <div className="search-bar">
+                    <input type="text" placeholder="Search" />
+                </div>
+                <div className="new-exam-button">
+                    <a href="/addexam">
+                        <button>New Exam</button>
+                    </a>
+                </div>
             </div>
-            <table>
+            <table className="exam-table">
                 <thead>
                     <tr>
                         <th>Exam</th>

@@ -7,6 +7,8 @@ import Login from "./pages/Login";
 import StudentHome from "./pages/StudentHome";
 import TeacherHome from "./pages/TeacherHome";
 import ViewExam from "./pages/ViewExam";
+import AddExam from "./pages/AddExam";
+
 
 
 function App() {
@@ -28,6 +30,7 @@ function App() {
           <Route path="/studenthome" component={StudentHome} />
           <Route path="/teacherhome" component={TeacherHome} />
           <Route path="/viewexam" component={ViewExam} />
+          <Route path="/addexam" component={AddExam} />
           <Route path="/" component={Login} />
         </Switch>
       </Router>
