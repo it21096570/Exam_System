@@ -6,6 +6,8 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import StudentHome from "./pages/StudentHome";
 import TeacherHome from "./pages/TeacherHome";
+import ViewExam from "./pages/ViewExam";
+
 
 function App() {
   return (
@@ -25,6 +27,7 @@ function App() {
           <Route path="/register" component={Register} />
           <Route path="/studenthome" component={StudentHome} />
           <Route path="/teacherhome" component={TeacherHome} />
+          <Route path="/viewexam" component={ViewExam} />
           <Route path="/" component={Login} />
         </Switch>
       </Router>
