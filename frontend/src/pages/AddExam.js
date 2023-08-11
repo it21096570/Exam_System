@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { useHistory } from 'react-router-dom';
+
 
 function AddExam() {
+  const history = useHistory();
+
+
   const [subject, setSubject] = useState('');
   const [teacherId, setTeacherId] = useState('');
   const [allocatedMarks, setAllocatedMarks] = useState('');
@@ -27,7 +33,28 @@ function AddExam() {
     } catch (error) {
       console.error('Error adding exam:', error);
     }
+
   };
+
+  /* const handleAddQuestions = async () => {
+    const paperForQuestions = {
+      subject,
+      teacherId,
+      allocatedMarks,
+      duration,
+      status: 'Draft',
+      date,
+    };
+
+    try {
+      const response = await axios.post('http://localhost:5001/paper', paperForQuestions);
+      console.log('Exam added successfully');
+      const newPaperId = response.data.paperId; // Assuming the API returns the newly created paperId
+      history.push(`/addquestion?paperId=${newPaperId}`);
+    } catch (error) {
+      console.error('Error adding exam:', error);
+    }
+  }; */
 
   return (
     <div className="add-exam-container">
@@ -91,7 +118,19 @@ function AddExam() {
         <br />
         <button className="add-exam-button" type="submit">Save</button>
         <br />
-        <a href="/addquestion"><button className="add-exam-button">Add Questions</button></a>
+
+        {/* <Link to={`/addquestion?paperId=${paperId}`}>
+          <button className="add-exam-button" onClick={handleAddQuestions}>
+            Add Questions
+          </button>
+        </Link> */}
+
+        <Link to={`/addquestion`}>
+          <button className="add-exam-button">
+            Add Questions
+          </button>
+        </Link>
+
         <br />
         <button className="add-exam-button" type="">Publish</button>
       </form>
