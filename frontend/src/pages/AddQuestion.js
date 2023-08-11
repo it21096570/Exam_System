@@ -69,7 +69,7 @@ function AddQuestion() {
         <br />
         <button className="add-exam-button" type="submit">Save</button>
         <br />
-        <Link to="/addquestion">
+        <Link to="/addanswers">
           <button className="add-exam-button">Add Answers</button>
         </Link>
         <br />

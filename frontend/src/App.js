@@ -9,6 +9,7 @@ import TeacherHome from "./pages/TeacherHome";
 import ViewExam from "./pages/ViewExam";
 import AddExam from "./pages/AddExam";
 import AddQuestion from "./pages/AddQuestion";
+import AddAnswers from "./pages/AddAnswers";
 
 
 
@@ -33,6 +34,7 @@ function App() {
           <Route path="/viewexam" component={ViewExam} />
           <Route path="/addexam" component={AddExam} />
           <Route path="/addquestion" component={AddQuestion} />
+          <Route path="/addanswers" component={AddAnswers} />
           <Route path="/" component={Login} />
         </Switch>
       </Router>
