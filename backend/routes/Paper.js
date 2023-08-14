@@ -9,6 +9,7 @@ router.get("/", /* validateToken, */ async (req, res) => {
     res.json(paperList);
 });
 
+
 router.post("/", /* validateToken, */ async (req, res) => {
     const paper = req.body;
     await Paper.create(paper);

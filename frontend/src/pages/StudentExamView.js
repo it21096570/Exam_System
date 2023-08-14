@@ -1,29 +1,34 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useHistory } from 'react-router-dom';
 
 function StudentExamView() {
     const [paperList, setPaperList] = useState([]);
+    let history = useHistory();
 
     useEffect(() => {
         // Fetch paper data
-        axios.get('http://localhost:5001/paper').then(response => {
+        axios.get('http://localhost:5001/paper')
+            .then(response => {
                 console.log('Response:', response.data);
                 setPaperList(response.data);
-            }).catch(error => {
+            })
+            .catch(error => {
                 console.error('Error fetching paper data:', error);
             });
 
     }, []);
 
+    const handlePaperClick = (paperId) => {
+        history.push(`/single-exam/${paperId}`);
+      };
+      
     return (
         <div className="view-exam-container">
             <div className="top-bar">
                 <div className="search-bar">
                     <input type="text" placeholder="Search" />
                 </div>
-                
             </div>
             <table className="exam-table">
                 <thead>
@@ -36,7 +41,10 @@ function StudentExamView() {
                 </thead>
                 <tbody>
                     {paperList.map(paper => (
-                        <tr key={paper.id}>
+                        <tr
+                            key={paper.paperId}
+                            onClick={() => handlePaperClick(paper.paperId)}
+                        >
                             <td>{paper.subject}</td>
                             <td>{paper.date}</td>
                             <td>{paper.duration + ' h'}</td>
@@ -49,4 +57,4 @@ function StudentExamView() {
     );
 }
 
-export default StudentExamView
+export default StudentExamView;
