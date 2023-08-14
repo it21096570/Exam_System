@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
 function SingleExam() {
     const [questions, setQuestions] = useState([]);
-    const { paperId } = useParams(); // Retrieve paperId from URL params
+    const { paperId } = useParams();
+
+    console.log(paperId);
 
     useEffect(() => {
-        // Fetch questions based on paperId
+        // Fetch questions related to the clicked paperId
         axios.get(`http://localhost:5001/questions?paperId=${paperId}`)
             .then(response => {
-                console.log('Questions:', response.data);
+                console.log(paperId);
+                console.log('Response:', response.data);
                 setQuestions(response.data);
             })
             .catch(error => {
@@ -20,7 +23,7 @@ function SingleExam() {
 
     return (
         <div>
-            <h2>Exam</h2>
+            <h1>Exam Questions</h1>
             <ul>
                 {questions.map(question => (
                     <li key={question.questionId}>{question.question}</li>

@@ -38,7 +38,7 @@ function App() {
           <Route path="/addquestion" component={AddQuestion} />
           <Route path="/addanswers" component={AddAnswers} />
           <Route path="/studentexamview" component={StudentExamView} />
-          <Route path="/single-exam/:paperId" component={SingleExamView} />
+          <Route path="/single-exam/:paperId" component={SingleExamView}/>
           <Route path="/" component={Login} />
         </Switch>
       </Router>

@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 
 function StudentExamView() {
     const [paperList, setPaperList] = useState([]);
-    let history = useHistory();
+    const history = useHistory();
 
     useEffect(() => {
         // Fetch paper data
@@ -16,13 +16,13 @@ function StudentExamView() {
             .catch(error => {
                 console.error('Error fetching paper data:', error);
             });
-
     }, []);
 
     const handlePaperClick = (paperId) => {
+        // Redirect to SingleExam page with paperId as a parameter
         history.push(`/single-exam/${paperId}`);
-      };
-      
+    };
+
     return (
         <div className="view-exam-container">
             <div className="top-bar">
@@ -44,6 +44,7 @@ function StudentExamView() {
                         <tr
                             key={paper.paperId}
                             onClick={() => handlePaperClick(paper.paperId)}
+                            style={{ cursor: 'pointer' }}
                         >
                             <td>{paper.subject}</td>
                             <td>{paper.date}</td>
