@@ -34,6 +34,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.ENUM('Complete', 'Not Complete'),
             defaultValue: null,
         },
+        status: {
+            type: DataTypes.ENUM('Pending', 'Attened'),
+            defaultValue: 'Pending',
+        },
     });
 
     StdPaper.associate = (models) => {
