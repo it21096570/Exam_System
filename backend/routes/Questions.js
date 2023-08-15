@@ -4,9 +4,15 @@ const { Questions } = require("../models");
 const { validateToken } = require("../middlewares/AuthMiddleware");
 
 
-router.get("/", /* validateToken, */ async (req, res) => {
+/* router.get("/", validateToken,  async (req, res) => {
     const questionList = await Questions.findAll();
     res.json(questionList);
+}); */
+
+router.get("/:paperId", /* validateToken, */ async (req, res) => {
+    const paperId = req.params.paperId;
+    const question = await Questions.findAll({where: { paperId: paperId } });
+    res.json(question);
 });
 
 router.post("/", /* validateToken, */ async (req, res) => {

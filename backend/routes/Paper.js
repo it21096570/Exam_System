@@ -9,6 +9,12 @@ router.get("/", /* validateToken, */ async (req, res) => {
     res.json(paperList);
 });
 
+router.get("/byId/:paperId", /* validateToken, */ async (req, res) => {
+    const paperId = req.params.paperId;
+    const paper = await Paper.findByPk(paperId);
+    res.json(paper);
+});
+
 
 router.post("/", /* validateToken, */ async (req, res) => {
     const paper = req.body;

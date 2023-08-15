@@ -3,32 +3,38 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
 function SingleExam() {
-    const [questions, setQuestions] = useState([]);
-    const { paperId } = useParams();
-
-    console.log(paperId);
+    const [paperObject, setPaperObject] = useState({});
+    const [question, setQuestion] = useState([]);
+    let { paperId } = useParams();
 
     useEffect(() => {
         // Fetch questions related to the clicked paperId
-        axios.get(`http://localhost:5001/questions?paperId=${paperId}`)
-            .then(response => {
-                console.log(paperId);
-                console.log('Response:', response.data);
-                setQuestions(response.data);
+        axios.get(`http://localhost:5001/paper/byId/${paperId}`)
+            .then((response) => {
+                setPaperObject(response.data);
             })
-            .catch(error => {
-                console.error('Error fetching questions:', error);
+            .catch((error) => {
+                console.error('Error fetching paper:', error);
             });
-    }, [paperId]);
+
+        axios.get(`http://localhost:5001/questions/${paperId}`)
+            .then((response) => {
+                setQuestion(response.data);
+            })
+            .catch((error) => {
+                console.error('Error fetching paper:', error);
+            });
+    }, [paperId]); // Only run the effect when paperId changes
 
     return (
         <div>
-            <h1>Exam Questions</h1>
-            <ul>
-                {questions.map(question => (
-                    <li key={question.questionId}>{question.question}</li>
-                ))}
-            </ul>
+            <div>{paperObject.subject}</div>
+
+            <div>
+                {question.map((question,key) => {
+                    return <div>{question.question}</div>
+                })}
+            </div>
         </div>
     );
 }

@@ -10,7 +10,6 @@ function StudentExamView() {
         // Fetch paper data
         axios.get('http://localhost:5001/paper')
             .then(response => {
-                console.log('Response:', response.data);
                 setPaperList(response.data);
             })
             .catch(error => {
