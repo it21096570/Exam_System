@@ -12,6 +12,7 @@ import AddQuestion from "./pages/AddQuestion";
 import AddAnswers from "./pages/AddAnswers";
 import StudentExamView from "./pages/StudentExamView";
 import SingleExamView from "./pages/SingleExam";
+import AnswersForQuestion from "./pages/AnswersForQuestion";
 
 
 
@@ -39,6 +40,7 @@ function App() {
           <Route path="/addanswers" component={AddAnswers} />
           <Route path="/studentexamview" component={StudentExamView} />
           <Route path="/single-exam/:paperId" component={SingleExamView}/>
+          <Route path="/answers-question/:questionId" component={AnswersForQuestion}/>
           <Route path="/" component={Login} />
         </Switch>
       </Router>

@@ -4,9 +4,11 @@ const { Answers } = require("../models");
 const { validateToken } = require("../middlewares/AuthMiddleware");
 
 
-router.get("/", /* validateToken, */ async (req, res) => {
-    const answerList = await Answers.findAll();
-    res.json(answerList);
+
+router.get("/:questionId", /* validateToken, */ async (req, res) => {
+    const questionId = req.params.questionId;
+    const answer = await Answers.findAll({where: { questionId: questionId } });
+    res.json(answer);
 });
 
 router.post("/", /* validateToken, */ async (req, res) => {
