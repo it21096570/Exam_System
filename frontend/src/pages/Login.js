@@ -6,27 +6,49 @@ import { BrowserRouter as Router, Link, Switch, Route } from "react-router-dom";
 function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
     const history = useHistory();
 
     const login = () => {
         const data = { username: username, password: password };
         axios.post("http://localhost:5001/user/login", data).then((response) => {
+
             if (response.data.error) {
                 alert(response.data.error);
+
             } else {
                 localStorage.setItem("access_token", response.data.accessToken);
                 const role = response.data.role;
+                const nic = response.data.nic;
+
+                console.log(nic);
+                console.log(role);
+
+                const fetchStudentData = async () => {
+                    try {
+                        const studentResponse = await axios.get(`http://localhost:5001/student/${nic}`);
+                        console.log(studentResponse.data.id);
+                        history.push("/studenthome");
+                    } catch (error) {
+                        console.error("Error fetching student:", error);
+                    }
+                };
+
                 if (role === "student" || role === "Student") {
-                    history.push("/studenthome");
+
+                    fetchStudentData();
+
                 } else if (role === "teacher" || role === "Teacher") {
                     history.push("/teacherhome");
+
                 } else {
                     // Default redirection for other roles or handle as needed
                     history.push("/");
                 }
             }
         });
-    }
+    };
+
 
     return (
         <div className="loginContainer">

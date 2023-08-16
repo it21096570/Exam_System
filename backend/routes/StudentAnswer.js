@@ -1,18 +1,20 @@
+// Import necessary modules and models
 const express = require("express");
 const router = express.Router();
 const { StudentAnswer } = require("../models");
 const { validateToken } = require("../middlewares/AuthMiddleware");
 
-
-router.get("/", validateToken, async (req, res) => {
-    const studentAnswerList = await StudentAnswer.findAll();
-    res.json(studentAnswerList);
-});
-
-router.post("/", validateToken, async (req, res) => {
-    const studentAnswer = req.body;
-    await StudentAnswer.create(studentAnswer);
-    res.json('success');
+// Create a new student answer
+router.post("/", /* validateToken, */ async (req, res) => {
+    try {
+        const studentAnswer = req.body;
+        await StudentAnswer.create(studentAnswer);
+        res.json({ message: 'Answer submitted successfully' });
+    } catch (error) {
+        console.error('Error submitting answer:', error);
+        res.status(500).json({ error: 'An error occurred while submitting the answer' });
+    }
 });
 
 module.exports = router;
+

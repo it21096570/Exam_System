@@ -41,6 +41,21 @@ function Register() {
 
         }
 
+        else if(response.data.role === "student" || response.data.role === "Student") {
+
+          const studentData = {
+            
+            name: data.name,
+            nic: data.nic,
+            
+          };
+          
+          axios.post("http://localhost:5001/student", studentData).then((response) => {
+            console.log("Teacher add WORKED");
+          })
+
+        }
+
         alert("Success: User Added successfully!");
         window.location.reload(); // Refresh the page
       })

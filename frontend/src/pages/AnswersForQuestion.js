@@ -1,14 +1,15 @@
 
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useHistory } from 'react-router-dom';
 
 
+
+
 function AnswersForQuestion() {
     const [questionObject, setQuestionObject] = useState({});
     const [answers, setAnswers] = useState([]);
-    let { questionId } = useParams();
+    let { paperId, questionId } = useParams();
 
     const history = useHistory();
 
@@ -31,9 +32,37 @@ function AnswersForQuestion() {
     }, [questionId]);
 
     const handleSubmitAnswer = () => {
-        // Logic to submit the selected answer
+        const selectedAnswer = document.querySelector('input[name="answer"]:checked');
+        if (selectedAnswer) {
+            const selectedAnswerIndex = parseInt(selectedAnswer.id.split('_')[1]);
+            const selectedAnswerObject = answers[selectedAnswerIndex];
+
+            // Check if the selected answer is correct or wrong
+            const answerStatus = selectedAnswerObject.status;
+            const points = answerStatus === 'Correct' ? 5 : 0;
+
+            const data = {
+                studentId: 1,
+                paperId:  paperId,
+                questionId: questionId,
+                answerId: selectedAnswerObject.answerId,
+                points: points,
+                answerStatus: answerStatus
+            };
+
+            axios.post('http://localhost:5001/studentanswer', data)  // Adjust the endpoint URL accordingly
+                .then(response => {
+                    console.log('Student answer saved:', response.data);
+                    // You can also update the UI to reflect the points earned or any other feedback
+                })
+                .catch(error => {
+                    console.error('Error saving student answer:', error);
+                });
+        }
+
         history.goBack();
     };
+
 
     return (
         <div className="answers-container">

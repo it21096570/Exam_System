@@ -30,7 +30,11 @@ function SingleExam() {
     }, [paperId]);
 
     const handleQuestionClick = (questionId) => {
-        history.push(`/answers-question/${questionId}`);
+        history.push(`/answers-question/${paperId}/${questionId}`);
+    };
+
+    const handleFinishPaper = () => {
+        
     };
 
     return (
@@ -46,6 +50,7 @@ function SingleExam() {
                     </div>
                 ))}
             </div>
+            <button className="submit-button" onClick={handleFinishPaper}>Finish Paper</button>
         </div>
     );
 }

@@ -44,9 +44,9 @@ router.post("/login", async (req, res) => {
                 return;
             }
 
-            const accessToken = sign({ username: user.username, role: user.role }, "important");
+            const accessToken = sign({ username: user.username, role: user.role, nic: user.nic }, "important");
 
-            res.json({ accessToken, role: user.role });
+            res.json({ accessToken, role: user.role, nic: user.nic });
         });
     } catch (error) {
         console.error(error);
