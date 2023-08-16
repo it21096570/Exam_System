@@ -2,20 +2,19 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useHistory } from 'react-router-dom';
 
+//import './SingleExam.css'; // Import the CSS file for this component
 
 function SingleExam() {
     const [paperObject, setPaperObject] = useState({});
     const [questions, setQuestions] = useState([]);
     let { paperId } = useParams();
     
-    // Access the history object
     const history = useHistory();
 
     useEffect(() => {
         axios.get(`http://localhost:5001/paper/byId/${paperId}`)
             .then((response) => {
                 setPaperObject(response.data);
-                console.log(response.data);
             })
             .catch((error) => {
                 console.error('Error fetching paper:', error);
@@ -35,14 +34,14 @@ function SingleExam() {
     };
 
     return (
-        <div>
-            <div>{paperObject.subject}</div>
-            <div>
+        <div className="single-exam-container">
+            <div className="paper-subject">{paperObject.subject}</div>
+            <div className="question-list">
                 {questions.map((question, questionIndex) => (
-                    <div key={questionIndex}>
+                    <div key={questionIndex} className="question-item">
                         <div
                             onClick={() => handleQuestionClick(question.questionId)}
-                            style={{ cursor: 'pointer' }}
+                            className="question-text"
                         >{question.questionNo}. {question.question}</div>
                     </div>
                 ))}
@@ -52,5 +51,3 @@ function SingleExam() {
 }
 
 export default SingleExam;
-
-
