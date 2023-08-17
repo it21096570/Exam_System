@@ -48,15 +48,28 @@ router.post("/login", async (req, res) => {
 
             res.json({ accessToken, role: user.role, nic: user.nic });
         });
+
+
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
 
+router.post("/temp",validateToken, async (req, res) => {
+    
+    //you can access user nic from nic
+    
 
-
-
-
+    res.send("OK");
+});
 
 module.exports = router
+
+
+
+
+
+
+
+

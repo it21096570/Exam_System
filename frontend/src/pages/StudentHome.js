@@ -11,10 +11,8 @@ function StudentHome() {
     useEffect(() => {
         axios.get(`http://localhost:5001/student/${nic}`)
             .then(response => {
-                // Check the response structure and data
                 console.log("Server Response:", response.data);
 
-                // Update the studentId state
                 setStudentId(response.data.id);
             })
             .catch(error => {

@@ -54,7 +54,7 @@ function AnswersForQuestion() {
 
             const data = {
 
-                studentId: studentId,
+                studentId: 2,
                 paperId: paperId,
                 questionId: questionId,
                 answerId: selectedAnswerObject.answerId,

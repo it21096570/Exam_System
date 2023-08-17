@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams, useHistory } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
-
+import { useHistory, useLocation } from 'react-router-dom';
 
 function StudentExamView() {
     const [paperList, setPaperList] = useState([]);
     const history = useHistory();
     const location = useLocation();
-    const searchParams = new URLSearchParams(location.search);
-    const studentId = searchParams.get('studentId');
-
-    console.log(studentId)
+    const { studentId } = new URLSearchParams(location.search);
 
     useEffect(() => {
         // Fetch paper data
@@ -39,9 +34,9 @@ function StudentExamView() {
             <table className="exam-table">
                 <thead>
                     <tr>
-                        <th>Exam</th>
-                        <th>Starting Time</th>
-                        <th>Exam Duration</th>
+                        <th>Subject</th>
+                        <th>Date</th>
+                        <th>Duration</th>
                         <th>Status</th>
                     </tr>
                 </thead>
