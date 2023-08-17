@@ -11,7 +11,7 @@ router.get("/", /* validateToken, */ async (req, res) => {
 
 router.get("/:nic", /* validateToken, */ async (req, res) => {
     const nic = req.params.nic;
-    const student = await Student.findAll({ where: { nic: nic } });
+    const student = await Student.findOne({ where: { nic: nic } });
     res.json(student);
 });
 
@@ -19,7 +19,8 @@ router.post("/", /* validateToken, */ async (req, res) => {
     const student = req.body;
     await Student.create(student);
     res.json('success');
-    
+
 });
+
 
 module.exports = router

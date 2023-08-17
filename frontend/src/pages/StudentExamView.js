@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useHistory } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+
 
 function StudentExamView() {
     const [paperList, setPaperList] = useState([]);
     const history = useHistory();
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const studentId = searchParams.get('studentId');
+
+    console.log(studentId)
 
     useEffect(() => {
         // Fetch paper data
@@ -19,7 +26,7 @@ function StudentExamView() {
 
     const handlePaperClick = (paperId) => {
         // Redirect to SingleExam page with paperId as a parameter
-        history.push(`/single-exam/${paperId}`);
+        history.push(`/single-exam/${paperId}?studentId=${studentId}`);
     };
 
     return (

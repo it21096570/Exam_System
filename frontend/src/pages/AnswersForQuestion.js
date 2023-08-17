@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+
 
 
 
@@ -10,8 +12,14 @@ function AnswersForQuestion() {
     const [questionObject, setQuestionObject] = useState({});
     const [answers, setAnswers] = useState([]);
     let { paperId, questionId } = useParams();
-
     const history = useHistory();
+    const location = useLocation();
+
+    const searchParams = new URLSearchParams(location.search);
+    const studentId = searchParams.get('studentId');
+
+    console.log("Paper ID:", paperId);
+    
 
     useEffect(() => {
         axios.get(`http://localhost:5001/questions/byId/${questionId}`)
@@ -31,6 +39,7 @@ function AnswersForQuestion() {
             });
     }, [questionId]);
 
+
     const handleSubmitAnswer = () => {
         const selectedAnswer = document.querySelector('input[name="answer"]:checked');
         if (selectedAnswer) {
@@ -41,9 +50,12 @@ function AnswersForQuestion() {
             const answerStatus = selectedAnswerObject.status;
             const points = answerStatus === 'Correct' ? 5 : 0;
 
+            
+
             const data = {
-                studentId: 1,
-                paperId:  paperId,
+
+                studentId: studentId,
+                paperId: paperId,
                 questionId: questionId,
                 answerId: selectedAnswerObject.answerId,
                 points: points,
@@ -63,6 +75,7 @@ function AnswersForQuestion() {
         history.goBack();
     };
 
+    
 
     return (
         <div className="answers-container">

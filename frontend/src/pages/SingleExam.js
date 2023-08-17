@@ -1,15 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
-//import './SingleExam.css'; // Import the CSS file for this component
 
 function SingleExam() {
     const [paperObject, setPaperObject] = useState({});
     const [questions, setQuestions] = useState([]);
-    let { paperId } = useParams();
-    
+
+    const location = useLocation();
     const history = useHistory();
+
+
+    
+    
+    const { paperId } = useParams();
+    const searchParams = new URLSearchParams(location.search);
+    const studentId = searchParams.get('studentId');
+
+    console.log("Paper ID:", paperId);
+    console.log("Student ID:", studentId);
+    
+    
 
     useEffect(() => {
         axios.get(`http://localhost:5001/paper/byId/${paperId}`)
@@ -30,7 +42,7 @@ function SingleExam() {
     }, [paperId]);
 
     const handleQuestionClick = (questionId) => {
-        history.push(`/answers-question/${paperId}/${questionId}`);
+        history.push(`/answers-question/${paperId}/${questionId}?studentId=${studentId}`);
     };
 
     const handleFinishPaper = () => {

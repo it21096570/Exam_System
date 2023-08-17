@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
-import { BrowserRouter as Router, Link, Switch, Route } from "react-router-dom";
+
+
 
 function Login() {
     const [username, setUsername] = useState('');
@@ -21,22 +22,12 @@ function Login() {
                 const role = response.data.role;
                 const nic = response.data.nic;
 
-                console.log(nic);
                 console.log(role);
 
-                const fetchStudentData = async () => {
-                    try {
-                        const studentResponse = await axios.get(`http://localhost:5001/student/${nic}`);
-                        console.log(studentResponse.data.id);
-                        history.push("/studenthome");
-                    } catch (error) {
-                        console.error("Error fetching student:", error);
-                    }
-                };
 
                 if (role === "student" || role === "Student") {
+                    history.push(`/studenthome?nic=${nic}`);
 
-                    fetchStudentData();
 
                 } else if (role === "teacher" || role === "Teacher") {
                     history.push("/teacherhome");
