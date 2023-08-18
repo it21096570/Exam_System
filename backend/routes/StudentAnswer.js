@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { StudentAnswer, Student } = require("../models"); // Make sure the paths are correct
+const { StudentAnswer, Student } = require("../models"); 
 const { validateToken } = require("../middlewares/AuthMiddleware");
 
 router.post("/", validateToken, async (req, res) => {
