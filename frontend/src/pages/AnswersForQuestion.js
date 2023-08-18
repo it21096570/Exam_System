@@ -5,18 +5,13 @@ import { useParams, useHistory } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 
 
-
-
-
 function AnswersForQuestion() {
     const [questionObject, setQuestionObject] = useState({});
     const [answers, setAnswers] = useState([]);
     let { paperId, questionId } = useParams();
     const history = useHistory();
     const location = useLocation();
-
-    const searchParams = new URLSearchParams(location.search);
-    const studentId = searchParams.get('studentId');
+    
 
     console.log("Paper ID:", paperId);
     
@@ -54,7 +49,6 @@ function AnswersForQuestion() {
 
             const data = {
 
-                studentId: 2,
                 paperId: paperId,
                 questionId: questionId,
                 answerId: selectedAnswerObject.answerId,

@@ -6,7 +6,8 @@ function StudentExamView() {
     const [paperList, setPaperList] = useState([]);
     const history = useHistory();
     const location = useLocation();
-    const { studentId } = new URLSearchParams(location.search);
+
+    
 
     useEffect(() => {
         // Fetch paper data
@@ -21,7 +22,7 @@ function StudentExamView() {
 
     const handlePaperClick = (paperId) => {
         // Redirect to SingleExam page with paperId as a parameter
-        history.push(`/single-exam/${paperId}?studentId=${studentId}`);
+        history.push(`/single-exam/${paperId}`);
     };
 
     return (

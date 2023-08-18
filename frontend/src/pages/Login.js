@@ -30,7 +30,7 @@ function Login() {
 
     
                 if (role === "student" || role === "Student") {
-                    history.push(`/studenthome?nic=${nic}`);
+                    history.push(`/studenthome`);
                 } else if (role === "teacher" || role === "Teacher") {
                     history.push("/teacherhome");
                 } else {

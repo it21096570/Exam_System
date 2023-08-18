@@ -42,7 +42,7 @@ function SingleExam() {
     }, [paperId]);
 
     const handleQuestionClick = (questionId) => {
-        history.push(`/answers-question/${paperId}/${questionId}?studentId=${studentId}`);
+        history.push(`/answers-question/${paperId}/${questionId}`);
     };
 
     const handleFinishPaper = () => {
