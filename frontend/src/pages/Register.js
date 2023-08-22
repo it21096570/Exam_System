@@ -5,6 +5,8 @@ import axios from 'axios';
 
 function Register() {
 
+  let role;
+
   const initialValues = {
     nic: "",
     name: "",
@@ -22,46 +24,37 @@ function Register() {
   })
 
   const onSubmit = (data) => {
-    axios.post("http://localhost:5001/user", data)
-      .then((response) => {
-        console.log("IT WORKED");
-        console.log(response);
-        console.log("Role:", response.data.role);
+    axios.post("http://localhost:5001/user", data).then((response) => {
 
-        if(response.data.role === "teacher" || response.data.role === "Teacher") {
+      console.log(data)
+      role = data.role
+      console.log(data.name)
 
-          const teacherData = {
-            nic: data.nic,
-            name: data.name,
-          };
-          
-          axios.post("http://localhost:5001/teacher", teacherData).then((response) => {
-            console.log("Teacher add WORKED");
+      /* if (role === "student" || role === "Student") {
+
+        const studentData = {
+          name: data.name,
+          nic: data.nic,
+        };
+
+        axios.post("http://localhost:5001/student", studentData)
+          .then((studentResponse) => {
+
+            console.log(studentData)
+            console.log("Student details inserted:", studentResponse.data);
           })
+          .catch((error) => {
+            console.error("Error inserting student details:", error);
+          });
 
-        }
+      } */
 
-        else if(response.data.role === "student" || response.data.role === "Student") {
+      alert("Success: User Added successfully!");
+      //window.location.reload(); // Refresh the page
 
-          const studentData = {
-            
-            name: data.name,
-            nic: data.nic,
-            
-          };
-          
-          axios.post("http://localhost:5001/student", studentData).then((response) => {
-            console.log("Teacher add WORKED");
-          })
-
-        }
-
-        alert("Success: User Added successfully!");
-        window.location.reload(); // Refresh the page
-      })
-      .catch((error) => {
-        console.error("An error occurred:", error);
-      });
+    }).catch((error) => {
+      console.error("An error occurred:", error);
+    });
   };
 
   return (

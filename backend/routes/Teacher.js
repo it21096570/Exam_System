@@ -8,7 +8,7 @@ router.get("/",  validateToken, async (req, res) => {
     res.json(studentList);
 });
 
-router.post("/", validateToken, async (req, res) => {
+router.post("/", async (req, res) => {
     const taecher = req.body;
     await Teacher.create(taecher);
     res.json('success');

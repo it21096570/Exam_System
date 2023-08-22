@@ -57,9 +57,7 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/temp",validateToken, async (req, res) => {
-    
-    //you can access user nic from nic
-    
+        
 
     res.send("OK");
 });

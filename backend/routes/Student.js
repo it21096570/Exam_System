@@ -15,7 +15,7 @@ router.get("/:nic", validateToken, async (req, res) => {
     res.json(student);
 });
 
-router.post("/", validateToken, async (req, res) => {
+router.post("/", async (req, res) => {
     const student = req.body;
     await Student.create(student);
     res.json('success');
