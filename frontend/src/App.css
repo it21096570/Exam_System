@@ -1,5 +1,3 @@
-
-
 /* CREATE POST PAGE CSS */
 
 .userRegister {
@@ -10,6 +8,7 @@
   justify-content: center;
   align-items: center;
 }
+
 .formContainer {
   display: flex;
   flex-direction: column;
@@ -231,9 +230,12 @@ span {
 .answers-container {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center content horizontally */
-  justify-content: center; /* Center content vertically */
-  height: 100vh; /* Use full viewport height */
+  align-items: center;
+  /* Center content horizontally */
+  justify-content: center;
+  /* Center content vertically */
+  height: 100vh;
+  /* Use full viewport height */
   font-family: Arial, sans-serif;
 }
 
@@ -246,7 +248,8 @@ span {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%; /* Use full width of the container */
+  width: 100%;
+  /* Use full width of the container */
 }
 
 .mcq-option {
@@ -265,7 +268,8 @@ span {
 
 .submit-button {
   margin-top: 20px;
-  padding: 8px 16px; /* Adjust padding for a smaller button */
+  padding: 8px 16px;
+  /* Adjust padding for a smaller button */
   background-color: dodgerblue;
   color: white;
   border: none;
@@ -280,18 +284,24 @@ span {
 .mcq-option {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Align items to start and end of the box */
+  justify-content: space-between;
+  /* Align items to start and end of the box */
   margin-bottom: 10px;
-  padding: 10px; /* Add padding to create small boxes */
-  border: 1px solid #ccc; /* Add a border to the boxes */
-  border-radius: 4px; /* Round the corners of the boxes */
+  padding: 10px;
+  /* Add padding to create small boxes */
+  border: 1px solid #ccc;
+  /* Add a border to the boxes */
+  border-radius: 4px;
+  /* Round the corners of the boxes */
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
-  width: 300px; /* Set a fixed width for all boxes */
+  width: 300px;
+  /* Set a fixed width for all boxes */
 }
 
 .mcq-option:hover {
-  background-color: #f0f0f0; /* Change background color on hover */
+  background-color: #f0f0f0;
+  /* Change background color on hover */
 }
 
 .radio-input {
@@ -299,7 +309,39 @@ span {
 }
 
 .radio-label {
-  flex: 1; /* Allow the label to take up remaining space */
+  flex: 1;
+  /* Allow the label to take up remaining space */
   cursor: pointer;
 }
 
+.exam-result-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f0f0f0;
+}
+
+.result-box {
+  width: 30%;
+  padding: 20px;
+  border: 2px solid white;
+  background-color: #ffffff;
+  border-color: black;
+  color: white;
+  text-align: center;
+}
+
+.pass-status {
+  font-size: 2em;
+  margin-bottom: 10px;
+}
+
+.passed {
+  color: green;
+}
+
+.failed {
+  color: red;
+}

@@ -32,7 +32,7 @@ function AddAnswers() {
 
     return (
         <div className="add-exam-container">
-            <h2>Add Exam</h2>
+            <h2>Add Answers</h2>
             <form className="exam-form" onSubmit={handleSubmit}>
                 <label>
                     Question ID:

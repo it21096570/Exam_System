@@ -11,6 +11,8 @@ function StudentExamView() {
         // Fetch paper data
         axios.get('http://localhost:5001/paper')
             .then(response => {
+
+                console.log("Check Response : ", response.data);
                 setPaperList(response.data);
             })
             .catch(error => {
@@ -20,18 +22,14 @@ function StudentExamView() {
 
     const handlePaperClick = (paperId) => {
         // Redirect to SingleExam page with paperId as a parameter
-
         const data = {
-
-
             paperId: paperId,
             teacherName: "TestTeacher",
-
         };
 
-        console.log("test id : ", paperId)
+        console.log("test id : ", paperId);
 
-        axios.post('http://localhost:5001/stdpaper', data)  // Adjust the endpoint URL accordingly
+        axios.post('http://localhost:5001/stdpaper', data)
             .then(response => {
                 console.log('Done!:', response.data);
                 // You can also update the UI to reflect the points earned or any other feedback
@@ -39,7 +37,6 @@ function StudentExamView() {
             .catch(error => {
                 console.error('Error saving student answer:', error);
             });
-
 
         history.push(`/single-exam/${paperId}`);
     };
@@ -61,7 +58,7 @@ function StudentExamView() {
                     </tr>
                 </thead>
                 <tbody>
-                    {paperList.map(paper => (
+                    {paperList.map((paper, index) => (
                         <tr
                             key={paper.paperId}
                             onClick={() => handlePaperClick(paper.paperId)}

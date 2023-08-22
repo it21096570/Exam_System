@@ -46,7 +46,8 @@ function SingleExam() {
     };
 
     const handleFinishPaper = () => {
-        
+
+        history.push(`/examresult/${paperId}`);
     };
 
     return (

@@ -13,6 +13,7 @@ import AddAnswers from "./pages/AddAnswers";
 import StudentExamView from "./pages/StudentExamView";
 import SingleExamView from "./pages/SingleExam";
 import AnswersForQuestion from "./pages/AnswersForQuestion";
+import ExamResult from "./pages/ExamResult";
 
 
 
@@ -21,13 +22,13 @@ function App() {
     <div className="App">
       <Router>
         <nav>
-          <ul>
+          {/* <ul>
             <li>
               <Link to="/home">Home</Link> <br />
               <Link to="/register">Register</Link>
               <Link to="/">Login</Link>
             </li>
-          </ul>
+          </ul> */}
         </nav>
         <Switch>
           <Route path="/home" component={Home} />
@@ -41,6 +42,7 @@ function App() {
           <Route path="/studentexamview" component={StudentExamView} />
           <Route path="/single-exam/:paperId" component={SingleExamView}/>
           <Route path="/answers-question/:paperId/:questionId" component={AnswersForQuestion} />
+          <Route path="/examresult/:paperId" component={ExamResult} />
           <Route path="/" component={Login} />
         </Switch>
       </Router>

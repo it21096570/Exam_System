@@ -73,10 +73,7 @@ function AnswersForQuestion() {
 
     return (
         <div className="answers-container">
-            <div className="question">
-                <h2>Question:</h2>
-                <div>{questionObject.question}</div>
-            </div>
+            
             <div className="answers">
                 <h2>Answers:</h2>
                 {answers.map((answer, answerIndex) => (

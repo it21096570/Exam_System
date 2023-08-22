@@ -24,7 +24,7 @@ function StudentHome() {
             <h1>Student Home</h1>
             
 
-            <Link to={`/studentexamview/?studentId=${studentId}`}>
+            <Link to={`/studentexamview`}>
                 <button className="add-exam-button">View exam List</button>
             </Link>
         </div>

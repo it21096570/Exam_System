@@ -57,13 +57,15 @@ router.get("/:paperId", validateToken, async (req, res) => {
             }
         });
 
+        res.json({ totalPoints: totalPoints });
 
-        res.json({ id: studentId, totalPoints: totalPoints });
+        console.log(totalPoints)
 
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'An error occurred' });
     }
 });
+
 
 module.exports = router;

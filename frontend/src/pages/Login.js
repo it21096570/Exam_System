@@ -30,7 +30,7 @@ function Login() {
 
     
                 if (role === "student" || role === "Student") {
-                    history.push(`/studenthome`);
+                    history.push(`/studentexamview`);
                 } else if (role === "teacher" || role === "Teacher") {
                     history.push("/teacherhome");
                 } else {
@@ -41,6 +41,10 @@ function Login() {
             }
         });
     };
+
+    const Register = () => {
+        history.push("/register");
+    }
 
 
     return (
@@ -61,7 +65,10 @@ function Login() {
                     setPassword(event.target.value);
                 }}
             />
+            <br />
             <button onClick={login}>Login</button>
+            <br />
+            <button onClick={Register}>Register</button>
         </div>
     );
 
