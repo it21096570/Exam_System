@@ -49,6 +49,7 @@ router.get("/:paperId", validateToken, async (req, res) => {
         });
 
         let totalPoints = 0;
+        let answerStatus
 
         answers.forEach(answer => {
             // Calculate points for each answer based on your specific conditions
@@ -57,9 +58,36 @@ router.get("/:paperId", validateToken, async (req, res) => {
             }
         });
 
-        res.json({ totalPoints: totalPoints });
+        res.json({ totalPoints: totalPoints, answerStatus: answerStatus });
 
         console.log(totalPoints)
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'An error occurred' });
+    }
+});
+
+router.get("/byPaperId/:paperId", validateToken, async (req, res) => {
+    const studentNIC = req.user; // Assuming req.user contains the student's NIC
+
+    try {
+        const student = await Student.findOne({ where: { nic: studentNIC } });
+
+        if (!student) {
+            return res.status(404).json({ error: 'Student not found' });
+        }
+
+        const paperId = req.params.paperId;
+        const studentId = student.id;
+
+        const answers = await StudentAnswer.findAll({
+            where: { paperId: paperId, studentId: studentId }
+        });
+
+        res.json(answers);
+
+
 
     } catch (error) {
         console.error(error);

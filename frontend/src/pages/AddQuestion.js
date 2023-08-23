@@ -46,6 +46,9 @@ function AddQuestion() {
       const addedPaperId = response.data.paperId;
       console.log('Paper ID:', addedPaperId);
       console.log('Question added successfully');
+
+      history.push(`/addanswers/`);
+
     } catch (error) {
       console.error('Error adding question:', error);
     }

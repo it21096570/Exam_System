@@ -11,7 +11,7 @@ router.get("/:questionId", validateToken, async (req, res) => {
     res.json(answer);
 });
 
-router.post("/", validateToken, async (req, res) => {
+router.post("/", /* validateToken, */ async (req, res) => {
     const answer = req.body;
     await Answers.create(answer);
     res.json('success');

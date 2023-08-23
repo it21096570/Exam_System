@@ -47,7 +47,7 @@ function AddAnswers() {
                 <label>
                     Answer:
                     <input
-                        type="number"
+                        type="text"
                         name="answer"
                         value={answer}
                         onChange={(e) => setanswer(e.target.value)}
