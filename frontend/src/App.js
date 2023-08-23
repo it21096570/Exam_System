@@ -6,7 +6,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import StudentHome from "./pages/StudentHome";
 import TeacherHome from "./pages/TeacherHome";
-import ViewExam from "./pages/ViewExam";
+import UpdateTeacherExam from "./pages/UpdateTeacherExam";
 import AddExam from "./pages/AddExam";
 import AddQuestion from "./pages/AddQuestion";
 import AddAnswers from "./pages/AddAnswers";
@@ -14,6 +14,7 @@ import StudentExamView from "./pages/StudentExamView";
 import SingleExamView from "./pages/SingleExam";
 import AnswersForQuestion from "./pages/AnswersForQuestion";
 import ExamResult from "./pages/ExamResult";
+import ViewExamTeacher from "./pages/ViewExamTeacher";
 
 
 
@@ -35,9 +36,10 @@ function App() {
           <Route path="/register" component={Register} />
           <Route path="/studenthome" component={StudentHome} />
           <Route path="/teacherhome" component={TeacherHome} />
-          <Route path="/viewexam" component={ViewExam} />
+          <Route path="/updateviewexam/:paperId" component={UpdateTeacherExam} />
+          <Route path="/viewexamteacher" component={ViewExamTeacher} />
           <Route path="/addexam" component={AddExam} />
-          <Route path="/addquestion" component={AddQuestion} />
+          <Route path="/addquestion/" component={AddQuestion} />
           <Route path="/addanswers" component={AddAnswers} />
           <Route path="/studentexamview" component={StudentExamView} />
           <Route path="/single-exam/:paperId" component={SingleExamView}/>

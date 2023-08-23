@@ -40,6 +40,36 @@ function AddExam() {
     }
   };
 
+  const AddQuestions = async () => {
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      const response = await axios.post('http://localhost:5001/paper', {
+        subject: subject,
+        alloctedMarks: alloctedMarks,
+        duration: duration,
+        status: 'Draft',
+        date: date,
+      }, {
+        headers: {
+          accessToken: accessToken,
+        },
+      });
+
+      
+
+      const paperId = response.data.paperId; // Assuming your API returns paperId
+
+      console.log('Paper ID:', paperId);
+      console.log('Exam added successfully');
+
+      history.push(`/addquestion/?paperId=${paperId}`);
+    } catch (error) {
+      console.error('Error adding exam:', error);
+    }
+  };
+
+
+
   return (
     <div className="add-exam-container">
       <h2>Add Exam</h2>
@@ -90,11 +120,13 @@ function AddExam() {
 
         <br />
 
-        <Link to={`/addquestion`}>
-          <button className="add-exam-button" type="button">
-            Add Questions
-          </button>
-        </Link>
+        {<button className="add-exam-button" type="button" onClick={AddQuestions}>
+          Add Questions
+        </button>}
+
+        <br />
+
+
 
         <br />
 

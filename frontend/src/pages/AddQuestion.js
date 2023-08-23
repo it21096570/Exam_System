@@ -1,34 +1,55 @@
-import { useLocation } from 'react-router-dom';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { useHistory } from 'react-router-dom';
 
 function AddQuestion() {
+  const history = useHistory();
 
-  const [paperId, setpaperId] = useState('');
-  const [questionNo, setquestionNo] = useState('');
-  const [question, setquestion] = useState('');
-
+  const [paperId, setPaperId] = useState('');
+  const [questionNo, setQuestionNo] = useState('');
+  const [question, setQuestion] = useState('');
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+
     const newQuestion = {
       paperId,
       questionNo,
       question,
     };
-  
+
     try {
       await axios.post('http://localhost:5001/questions', newQuestion);
-      console.log(newQuestion.questionNo);
       console.log('Question added successfully');
-      console.log(newQuestion);
     } catch (error) {
       console.error('Error adding Question:', error);
     }
   };
-  
+
+  const AddAnswer = async () => {
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      const response = await axios.post(
+        'http://localhost:5001/questions',
+        {
+          paperId,
+          questionNo,
+          question,
+        },
+        {
+          headers: {
+            accessToken: accessToken,
+          },
+        }
+      );
+
+      const addedPaperId = response.data.paperId;
+      console.log('Paper ID:', addedPaperId);
+      console.log('Question added successfully');
+    } catch (error) {
+      console.error('Error adding question:', error);
+    }
+  };
 
   return (
     <div className="add-exam-container">
@@ -40,7 +61,7 @@ function AddQuestion() {
             type="text"
             name="paperId"
             value={paperId}
-            onChange={(e) => setpaperId(e.target.value)}
+            onChange={(e) => setPaperId(e.target.value)}
           />
         </label>
         <br />
@@ -51,7 +72,7 @@ function AddQuestion() {
             type="number"
             name="questionNo"
             value={questionNo}
-            onChange={(e) => setquestionNo(e.target.value)}
+            onChange={(e) => setQuestionNo(e.target.value)}
           />
         </label>
         <br />
@@ -62,21 +83,23 @@ function AddQuestion() {
             type="text"
             name="question"
             value={question}
-            onChange={(e) => setquestion(e.target.value)}
+            onChange={(e) => setQuestion(e.target.value)}
           />
         </label>
+        <br />
 
+        <button className="add-exam-button" type="submit">
+          Save
+        </button>
         <br />
-        <button className="add-exam-button" type="submit">Save</button>
-        <br />
-        <Link to="/addanswers">
-          <button className="add-exam-button">Add Answers</button>
-        </Link>
+
+        <button className="add-exam-button" type="button" onClick={AddAnswer}>
+          Add Answers
+        </button>
         <br />
       </form>
     </div>
   );
 }
 
-
-export default AddQuestion
+export default AddQuestion;

@@ -7,7 +7,7 @@ function TeacherHome() {
 
       <h1>Teacher Home</h1>
 
-      <Link to ='/viewexam'>ViewExam</Link>
+      <Link to ='/viewexamteacher'>ViewExam</Link>
       
     </div>
   )

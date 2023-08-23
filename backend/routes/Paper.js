@@ -46,4 +46,36 @@ router.post("/", validateToken, async (req, res) => {
     }
 });
 
+router.put("/:paperId", validateToken, async (req, res) => {
+    try {
+        const paperId = req.params.paperId;
+        const teacherNIC = req.user;
+
+        const teacher = await Teacher.findOne({ where: { nic: teacherNIC } });
+
+        if (!teacher) {
+            return res.status(404).json({ error: 'Teacher not found' });
+        }
+
+        const paperToUpdate = await Paper.findByPk(paperId);
+
+        if (!paperToUpdate) {
+            return res.status(404).json({ error: 'Paper not found' });
+        }
+
+        if (paperToUpdate.teacherId !== teacher.teacherId) {
+            return res.status(403).json({ error: 'Unauthorized' });
+        }
+
+        const updatedPaper = await paperToUpdate.update(req.body);
+
+        console.log("Paper updated:", updatedPaper);
+
+        res.json({ message: 'Paper updated successfully', paper: updatedPaper });
+    } catch (error) {
+        console.error('Error updating Paper:', error);
+        res.status(500).json({ error: 'An error occurred while updating the Paper' });
+    }
+});
+
 module.exports = router

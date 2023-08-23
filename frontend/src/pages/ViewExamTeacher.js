@@ -1,10 +1,15 @@
 import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
+
+
 import axios from 'axios';
 
+function ViewExamTeacher() {
 
-function ViewExam() {
     const [paperList, setPaperList] = useState([]);
+    const history = useHistory();
 
     useEffect(() => {
         // Fetch paper data
@@ -17,6 +22,12 @@ function ViewExam() {
                 console.error('Error fetching paper data:', error);
             });
     }, []);
+
+    const onClick = (paperId) => {
+
+        history.push(`/updateviewexam/${paperId}`);
+
+    };
 
     return (
         <div className="view-exam-container">
@@ -33,17 +44,25 @@ function ViewExam() {
             <table className="exam-table">
                 <thead>
                     <tr>
+                        <th>ID</th>
                         <th>Exam</th>
                         <th>Last Update</th>
                         <th>Status</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     {paperList.map(paper => (
                         <tr key={paper.paperId}>
+                            <td>{paper.paperId}</td>
                             <td>{paper.subject}</td>
                             <td>{paper.updatedAt}</td>
                             <td>{paper.status}</td>
+                            <td>
+
+                                <button onClick={() => onClick(paper.paperId)}>Update</button>
+
+                            </td>
                         </tr>
                     ))}
                 </tbody>
@@ -52,4 +71,6 @@ function ViewExam() {
     );
 }
 
-export default ViewExam;
+export default ViewExamTeacher
+
+

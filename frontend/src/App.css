@@ -345,3 +345,42 @@ span {
 .failed {
   color: red;
 }
+
+/* UpdateTeacherExam.css */
+
+.update-exam-container {
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
+}
+
+.exam-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.exam-form label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.exam-form input {
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.update-exam-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.update-exam-button:hover {
+  background-color: #0056b3;
+}
+

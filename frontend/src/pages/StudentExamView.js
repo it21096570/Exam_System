@@ -58,7 +58,9 @@ function StudentExamView() {
                     </tr>
                 </thead>
                 <tbody>
-                    {paperList.map((paper, index) => (
+                    {paperList
+                    .filter(paper => paper.status !== 'Draft')
+                    .map((paper, index) => (
                         <tr
                             key={paper.paperId}
                             onClick={() => handlePaperClick(paper.paperId)}
