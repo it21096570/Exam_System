@@ -314,37 +314,7 @@ span {
   cursor: pointer;
 }
 
-.exam-result-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background-color: #f0f0f0;
-}
 
-.result-box {
-  width: 30%;
-  padding: 20px;
-  border: 2px solid white;
-  background-color: #ffffff;
-  border-color: black;
-  color: white;
-  text-align: center;
-}
-
-.pass-status {
-  font-size: 2em;
-  margin-bottom: 10px;
-}
-
-.passed {
-  color: green;
-}
-
-.failed {
-  color: red;
-}
 
 /* UpdateTeacherExam.css */
 
@@ -382,5 +352,83 @@ span {
 
 .update-exam-button:hover {
   background-color: #0056b3;
+}
+
+/* styles.css */
+
+/* Reset default margin and padding */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Center align content */
+.result-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+}
+
+/* Result Box */
+.result-box {
+  border: 2px solid black;
+  padding: 20px;
+  display: inline-block;
+  text-align: center;
+  margin-bottom: 20px;
+  width: 500px;
+}
+
+.grade-containere{
+  font-size: 20px;
+  padding-top: 10px;
+}
+
+.questionStatus{
+  padding-top: 20px;
+  padding-bottom: 10px;
+  color: #007bff;
+
+}
+
+.status{
+  font-size: 20px;
+}
+
+/* Passed status */
+.pass-status.passed {
+  font-size: 40px;
+  color: green;
+}
+
+/* Failed status */
+.pass-status.failed {
+  font-size: 40px;
+  color: red;
+}
+
+/* Grade and Total Points */
+.grade-container {
+  margin-top: 10px;
+  font-size: 18px;
+}
+
+/* Question Status */
+.question-status {
+  text-align: center;
+}
+
+/* Question List */
+.question-list {
+  list-style: none;
+  padding: 0;
+}
+
+.question-item {
+  margin-bottom: 10px;
 }
 

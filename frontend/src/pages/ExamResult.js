@@ -66,41 +66,36 @@ function ExamResult() {
     }, [totalPoints]);
 
     return (
-        <div className="exam-result-container">
-            {totalPoints !== null ? (
-                <div>
-                    <div className="result-box">
-                        <p className={`pass-status ${passFailStatus.toLowerCase()}`}>
-                            {passFailStatus}
-                        </p>
-                        <p style={{ color: "black" }}>{grade} - {totalPoints}</p>
-                    </div>
-                    <div className="question-status">
-                        <h2>Question Status</h2>
-                        <ul>
-                            {questions.length > 0 && (
-                                <QuestionList questions={questions} />
-                            )}
-                        </ul>
-                    </div>
-                </div>
-            ) : (
-                <p>Loading...</p>
-            )}
+        <div className="result-container">
+            <div className={`result-box ${passFailStatus.toLowerCase()}`}>
+                <p className={`pass-status ${passFailStatus.toLowerCase()}`}>
+                    {passFailStatus}
+                </p>
+                <p className='grade-containere'>{grade} - {totalPoints}</p>
+            </div>
+            <div className="question-status">
+                <h2 className="questionStatus">Question Review</h2>
+                {questions.length > 0 && (
+                    <QuestionList questions={questions} />
+                    
+                )}
+                <br/>
+            </div>
         </div>
     );
+    
+
 }
 
 function QuestionList({ questions }) {
     const questionItems = [];
     for (let i = 0; i < questions.length; i++) {
         questionItems.push(
-            <li key={i}>
+            <div className='status' key={i}>
                 Question {i + 1}: {questions[i].answerStatus}
-            </li>
+            </div>
         );
     }
     return questionItems;
 }
-
 export default ExamResult;

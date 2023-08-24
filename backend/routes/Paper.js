@@ -1,7 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const { Paper, Teacher } = require("../models");
+const { Paper, Teacher, sequelize } = require("../models");
 const { validateToken } = require("../middlewares/AuthMiddleware");
+
+
 
 
 router.get("/", validateToken, async (req, res) => {
@@ -19,7 +21,7 @@ router.get("/byId/:paperId", validateToken, async (req, res) => {
 
 router.post("/", validateToken, async (req, res) => {
     try {
-        const teacherNIC = req.user; 
+        const teacherNIC = req.user;
         console.log("Teacher NIC:", teacherNIC);
 
         const teacher = await Teacher.findOne({ where: { nic: teacherNIC } });
@@ -40,6 +42,7 @@ router.post("/", validateToken, async (req, res) => {
         console.log("Paper created:", createdPaper);
 
         res.json({ message: 'Paper submitted successfully', paper: createdPaper });
+
     } catch (error) {
         console.error('Error submitting Paper:', error);
         res.status(500).json({ error: 'An error occurred while submitting the Paper' });
@@ -77,5 +80,54 @@ router.put("/:paperId", validateToken, async (req, res) => {
         res.status(500).json({ error: 'An error occurred while updating the Paper' });
     }
 });
+
+
+router.get("/latestPaperId", validateToken, async (req, res) => {
+    try {
+
+        const teacherNIC = req.user;
+        console.log("Teacher NIC:", teacherNIC);
+
+        const teacher = await Teacher.findOne({ where: { nic: teacherNIC } });
+
+        if (!teacher) {
+            return res.status(404).json({ error: 'Teacher not found' });
+        }
+
+        const teacherID = teacher.teacherId;
+
+        console.log("Teacher ID:", teacherID);
+
+
+        const query = `
+        SELECT MAX(paperId) AS latestPaperId
+        FROM papers
+        WHERE teacherId = :teacherId
+      `;
+
+        const [result] = await sequelize.query(query, {
+            replacements: { teacherID },
+            type: sequelize.QueryTypes.SELECT
+        });
+
+        if (!result || !result.latestPaperId) {
+            return res.status(404).json({ error: 'No paper found' });
+        }
+
+        const latestPaperId = result.latestPaperId;
+
+
+        console.log(latestPaperId);
+
+        res.json({ latestPaperId });
+
+    } catch (error) {
+        console.error('Error fetching latest Paper ID:', error);
+        res.status(500).json({ error: 'An error occurred while fetching the latest Paper ID' });
+    }
+});
+
+module.exports = router;
+
 
 module.exports = router
