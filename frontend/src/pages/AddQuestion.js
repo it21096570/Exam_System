@@ -123,8 +123,16 @@ function AddQuestion() {
   useEffect(() => {
     async function fetchLatestPaperId() {
       try {
-        const response = await axios.get('http://localhost:5001/paper/latestPaperId');
-        
+        const accessToken = localStorage.getItem('accessToken');
+
+        console.log(accessToken);
+
+        const response = await axios.get('http://localhost:5001/paper/latestPaperId', {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+
         const latestPaperId = response.data.latestPaperId;
 
         console.log("Latest Paper ID:", latestPaperId);
@@ -151,38 +159,15 @@ function AddQuestion() {
     try {
       await axios.post('http://localhost:5001/questions', newQuestion);
       console.log('Question added successfully');
+
+      history.push(`/addanswers/`);
+
     } catch (error) {
       console.error('Error adding Question:', error);
     }
   };
 
-  const AddAnswer = async () => {
-    try {
-      const accessToken = localStorage.getItem('accessToken');
-      const response = await axios.post(
-        'http://localhost:5001/questions',
-        {
-          paperId,
-          questionNo,
-          question,
-        },
-        {
-          headers: {
-            accessToken: accessToken,
-          },
-        }
-      );
 
-      const addedPaperId = response.data.paperId;
-      console.log('Paper ID:', addedPaperId);
-      console.log('Question added successfully');
-
-      history.push(`/addanswers/`);
-
-    } catch (error) {
-      console.error('Error adding question:', error);
-    }
-  };
 
   return (
     <div className="add-exam-container">
@@ -221,12 +206,7 @@ function AddQuestion() {
         </label>
         <br />
 
-        <button className="add-exam-button" type="submit">
-          Save
-        </button>
-        <br />
-
-        <button className="add-exam-button" type="button" onClick={AddAnswer}>
+        <button className="add-exam-button" type="submit" onClick={handleSubmit}>
           Add Answers
         </button>
         <br />

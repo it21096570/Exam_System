@@ -39,7 +39,7 @@ function App() {
           <Route path="/updateviewexam/:paperId" component={UpdateTeacherExam} />
           <Route path="/viewexamteacher" component={ViewExamTeacher} />
           <Route path="/addexam" component={AddExam} />
-          <Route path="/addquestion/" component={AddQuestion} />
+          <Route path="/addquestion" component={AddQuestion} />
           <Route path="/addanswers" component={AddAnswers} />
           <Route path="/studentexamview" component={StudentExamView} />
           <Route path="/single-exam/:paperId" component={SingleExamView}/>

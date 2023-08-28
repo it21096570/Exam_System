@@ -16,10 +16,6 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: null,
             
         },
-        alloctedMarks: {
-            type: DataTypes.INTEGER,
-            defaultValue: null,
-        },
         duration: {
             type: DataTypes.STRING(45),
             defaultValue: null,

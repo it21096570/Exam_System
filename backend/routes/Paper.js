@@ -75,6 +75,7 @@ router.put("/:paperId", validateToken, async (req, res) => {
         console.log("Paper updated:", updatedPaper);
 
         res.json({ message: 'Paper updated successfully', paper: updatedPaper });
+
     } catch (error) {
         console.error('Error updating Paper:', error);
         res.status(500).json({ error: 'An error occurred while updating the Paper' });
@@ -82,7 +83,9 @@ router.put("/:paperId", validateToken, async (req, res) => {
 });
 
 
-router.get("/latestPaperId", validateToken, async (req, res) => {
+router.get("/latestPaperId",  validateToken, async (req, res) => {
+
+    
     try {
 
         const teacherNIC = req.user;
@@ -106,7 +109,7 @@ router.get("/latestPaperId", validateToken, async (req, res) => {
       `;
 
         const [result] = await sequelize.query(query, {
-            replacements: { teacherID },
+            replacements: { teacherId: teacherID },
             type: sequelize.QueryTypes.SELECT
         });
 
@@ -117,7 +120,7 @@ router.get("/latestPaperId", validateToken, async (req, res) => {
         const latestPaperId = result.latestPaperId;
 
 
-        console.log(latestPaperId);
+        console.log("Latest PI", latestPaperId);
 
         res.json({ latestPaperId });
 
@@ -129,5 +132,3 @@ router.get("/latestPaperId", validateToken, async (req, res) => {
 
 module.exports = router;
 
-
-module.exports = router

@@ -1,14 +1,39 @@
-import React from 'react'
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 function AddAnswers() {
 
-    const [questionId, setquestionId] = useState('');
+    const [questionId, setQuestionId] = useState('');
     const [answer, setanswer] = useState('');
     const [mark, setmark] = useState('');
     const [status, setstatus] = useState('');
+
+    useEffect(() => {
+        async function fetchLatestQusetionId() {
+          try {
+    
+            const accessToken = localStorage.getItem('accessToken');
+    
+            const response = await axios.get('http://localhost:5001/question/latestQuestionId', {
+              headers: {
+                Authorization: `Bearer ${accessToken}`, // Send the token in the Authorization header
+              },
+            });
+    
+            const latestQuestionId = response.data.latestQuestionId;
+    
+            console.log("Latest Question ID:", latestQuestionId);
+    
+            setQuestionId(latestQuestionId);
+    
+          } catch (error) {
+            console.error('Error fetching latest Question ID:', error);
+          }
+        }
+    
+        fetchLatestQusetionId();
+      }, []);
 
 
     const handleSubmit = async (event) => {
@@ -40,7 +65,7 @@ function AddAnswers() {
                         type="text"
                         name="questionId"
                         value={questionId}
-                        onChange={(e) => setquestionId(e.target.value)}
+                        onChange={(e) => setQuestionId(e.target.value)}
                     />
                 </label>
                 <br />

@@ -56,12 +56,6 @@ router.post("/login", async (req, res) => {
     }
 });
 
-router.post("/temp",validateToken, async (req, res) => {
-        
-
-    res.send("OK");
-});
-
 module.exports = router
 
 

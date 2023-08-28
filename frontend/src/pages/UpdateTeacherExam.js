@@ -89,6 +89,8 @@ function UpdateTeacherExam() {
         } catch (error) {
             console.error('Error updating exam:', error);
         }
+
+
     };
     
 
@@ -106,15 +108,7 @@ function UpdateTeacherExam() {
                 />
                 <br />
 
-                <label htmlFor="alloctedMarks">Allocated Marks:</label>
-                <input
-                    type="text"
-                    id="alloctedMarks"
-                    name="alloctedMarks"
-                    value={alloctedMarks}
-                    onChange={(e) => setAllocatedMarks(e.target.value)}
-                />
-                <br />
+                
 
                 <label htmlFor="duration">Duration:</label>
                 <input
