@@ -1,9 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useHistory } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-
+import '../css/answersForQuestion.css'; // Import your custom CSS file
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function AnswersForQuestion() {
     const [questionObject, setQuestionObject] = useState({});
@@ -11,22 +11,26 @@ function AnswersForQuestion() {
     let { paperId, questionId } = useParams();
     const history = useHistory();
     const location = useLocation();
-    
-
-    console.log("Paper ID:", paperId);
-    
 
     useEffect(() => {
-        axios.get(`http://localhost:5001/questions/byId/${questionId}`)
-            .then((response) => {
+        const token = localStorage.getItem('accessToken');
+
+        axios.get(`http://localhost:5001/questions/byId/${questionId}`, {
+            headers: {
+                Authorization: `${token}`
+            }
+          }).then((response) => {
                 setQuestionObject(response.data);
             })
             .catch((error) => {
                 console.error('Error fetching question:', error);
             });
 
-        axios.get(`http://localhost:5001/answers/${questionId}`)
-            .then((response) => {
+        axios.get(`http://localhost:5001/answers/${questionId}`, {
+            headers: {
+                Authorization: `${token}`
+            }
+          }).then((response) => {
                 setAnswers(response.data);
             })
             .catch((error) => {
@@ -34,8 +38,10 @@ function AnswersForQuestion() {
             });
     }, [questionId]);
 
-
     const handleSubmitAnswer = () => {
+
+        const token = localStorage.getItem('accessToken');
+        
         const selectedAnswer = document.querySelector('input[name="answer"]:checked');
         if (selectedAnswer) {
             const selectedAnswerIndex = parseInt(selectedAnswer.id.split('_')[1]);
@@ -45,7 +51,7 @@ function AnswersForQuestion() {
             const answerStatus = selectedAnswerObject.status;
             const points = answerStatus === 'Correct' ? 5 : 0;
 
-            
+
 
             const data = {
 
@@ -56,24 +62,23 @@ function AnswersForQuestion() {
                 answerStatus: answerStatus
             };
 
-            axios.post('http://localhost:5001/studentanswer', data)  // Adjust the endpoint URL accordingly
-                .then(response => {
+            axios.post('http://localhost:5001/studentanswer', data, {
+                headers: {
+                    Authorization: `${token}`
+                }
+              }).then(response => {
                     console.log('Student answer saved:', response.data);
-                    // You can also update the UI to reflect the points earned or any other feedback
                 })
                 .catch(error => {
                     console.error('Error saving student answer:', error);
                 });
         }
 
-        history.goBack();
+        history.push(`/single-exam/${paperId}`);
     };
 
-    
-
     return (
-        <div className="answers-container">
-            
+        <div className="center-container">
             <div className="answers">
                 <h2>Answers:</h2>
                 {answers.map((answer, answerIndex) => (
@@ -82,14 +87,14 @@ function AnswersForQuestion() {
                             type="radio"
                             name="answer"
                             id={`answer_${answerIndex}`}
-                            className="radio-input"
+                            className="form-check-input"
                         />
-                        <label htmlFor={`answer_${answerIndex}`} className="radio-label">
+                        <label htmlFor={`answer_${answerIndex}`} className="form-check-label">
                             {answer.answer}
                         </label>
                     </div>
                 ))}
-                <button onClick={handleSubmitAnswer} className="submit-button">
+                <button onClick={handleSubmitAnswer} className="btn btn-primary btn-submit">
                     Submit Answer
                 </button>
             </div>

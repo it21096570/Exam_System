@@ -1,0 +1,25 @@
+.container {
+    margin-top: 2rem;
+  }
+  
+  .border-container {
+    border: 2px solid #000000;
+    padding: 1.5rem;
+    border-radius: 5px;
+    margin-top: 10%;
+  }
+  
+  .form-label {
+    font-weight: bold;
+  }
+  
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .btn-container {
+    margin-top: 1rem;
+  }
+  .mb-4{
+    color: rgb(4, 4, 66);
+  }

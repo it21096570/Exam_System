@@ -1,0 +1,114 @@
+/* Inside 'add-answers.css' file */
+
+.add-exam-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .add-exam-card {
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    border: 2px solid #000;
+    padding: 30px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .add-exam-card h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .exam-form label {
+    font-size: 16px;
+    color: #555;
+    display: block;
+    margin-bottom: 6px;
+  }
+  
+  .exam-form input[type="text"],
+  .exam-form input[type="number"],
+  .exam-form select {
+    font-size: 16px;
+    padding: 10px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 8px;
+    transition: border-color 0.3s;
+  }
+  
+  .exam-form input[type="text"]:focus,
+  .exam-form input[type="number"]:focus,
+  .exam-form select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  }
+  
+  .add-exam-button {
+    font-size: 16px;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    width: 100%;
+    margin-top: 16px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .add-exam-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .add-exam-button.secondary {
+    background-color: #28a745;
+  }
+  
+  .add-exam-button.secondary:hover {
+    background-color: #218838;
+  }
+  
+  .add-exam-button.danger {
+    background-color: #dc3545;
+  }
+  
+  .add-exam-button.danger:hover {
+    background-color: #c82333;
+  }
+
+  .add-exam-button.primary {
+    background-color: #007bff;
+    color: white;
+    border: none;
+  }
+  
+  .add-exam-button.primary:hover {
+    background-color: #0056b3;
+  }
+  
+  .add-exam-button.secondary {
+    background-color: #28a745;
+    color: white;
+    border: none;
+  }
+  
+  .add-exam-button.secondary:hover {
+    background-color: #218838;
+  }
+  
+  .add-exam-button.danger {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+  }
+  
+  .add-exam-button.danger:hover {
+    background-color: #c82333;
+  }

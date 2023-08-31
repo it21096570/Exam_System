@@ -10,26 +10,26 @@
     background-color: #fff;
     border-radius: 10px;
     border: 2px solid #000;
-    padding: 30px; /* Increase padding for more space */
+    padding: 30px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 500px; /* Adjust max-width to increase card size */
+    max-width: 500px;
     width: 100%;
     text-align: center;
   }
   
   .add-exam-card h2 {
-    font-size: 28px; /* Increase font size */
-    color: #110a48;
+    font-size: 28px;
+    color: #333;
     margin-bottom: 20px;
   }
   
-  .form-group label {
+  .exam-form label {
     font-size: 16px;
     color: #555;
   }
   
-  .form-group input[type="text"],
-  .form-group input[type="date"] {
+  .exam-form input[type="text"],
+  .exam-form input[type="number"] {
     font-size: 16px;
     padding: 10px;
     width: 100%;
@@ -39,8 +39,8 @@
     transition: border-color 0.3s;
   }
   
-  .form-group input[type="text"]:focus,
-  .form-group input[type="date"]:focus {
+  .exam-form input[type="text"]:focus,
+  .exam-form input[type="number"]:focus {
     border-color: #007bff;
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
   }
@@ -51,16 +51,18 @@
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    width: 100%;
+    margin-top: 10px;
   }
   
   .add-exam-button.primary {
-    background-color: #28a745;
+    background-color: #007bff;
     color: white;
     border: none;
   }
   
   .add-exam-button.primary:hover {
-    background-color: #28a745;
+    background-color: #0056b3;
   }
   
   .add-exam-button.success {
@@ -71,33 +73,5 @@
   
   .add-exam-button.success:hover {
     background-color: #218838;
-  }
-  
-  .button-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Center buttons vertically */
-    margin-top: 20px;
-  }
-
-  .add-exam-button {
-    font-size: 16px;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-    width: 100%; /* Ensure both buttons take full width */
-  }
-
-  .button-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Center buttons vertically */
-    justify-content: center; /* Center buttons horizontally */
-    margin-top: 20px;
-  }
-  
-  .button-container button {
-    margin-top: 10px;
   }
   

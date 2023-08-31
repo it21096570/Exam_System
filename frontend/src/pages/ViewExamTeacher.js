@@ -12,28 +12,28 @@ function ViewExamTeacher() {
     const [paperList, setPaperList] = useState([]);
     const [filteredPapers, setFilteredPapers] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
+    const [accessToken, setAccessToken] = useState('');
     const history = useHistory();
 
+
     useEffect(() => {
+
+        const token = localStorage.getItem('accessToken');
+
         // Fetch paper data
-        axios.get('http://localhost:5001/paper')
+        axios.get('http://localhost:5001/paper', {
+            headers: {
+                Authorization: `${token}`
+            }
+        })
             .then(response => {
-                // Update the state with fetched data
-                setPaperList(response.data); // Assuming the response data is an array of papers
+                setPaperList(response.data);
+                //alert(response.data.paperId)
             })
             .catch(error => {
                 console.error('Error fetching paper data:', error);
             });
     }, []);
-
-    useEffect(() => {
-        console.log('searchQuery:', searchQuery);
-        const filtered = paperList.filter(paper =>
-            paper.subject.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-        console.log('filteredPapers:', filtered);
-        setFilteredPapers(filtered);
-    }, [searchQuery, paperList]);
 
     const onClick = (paperId) => {
         history.push(`/updateviewexam/${paperId}`);

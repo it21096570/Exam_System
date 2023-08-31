@@ -1,38 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useHistory } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
-
+import '../css/singleExam.css'; // Import your custom CSS file for this component
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function SingleExam() {
     const [paperObject, setPaperObject] = useState({});
     const [questions, setQuestions] = useState([]);
+    const [remainingTime, setRemainingTime] = useState(0);
+    const [isExamFinished, setIsExamFinished] = useState(false);
 
-    const location = useLocation();
     const history = useHistory();
-
-
-    
-    
     const { paperId } = useParams();
-    const searchParams = new URLSearchParams(location.search);
-    const studentId = searchParams.get('studentId');
-
-    console.log("Paper ID:", paperId);
-    console.log("Student ID:", studentId);
-    
-    
 
     useEffect(() => {
-        axios.get(`http://localhost:5001/paper/byId/${paperId}`)
+        const token = localStorage.getItem('accessToken');
+        
+        axios.get(`http://localhost:5001/paper/byId/${paperId}`, {
+            headers: {
+                Authorization: `${token}`
+            }
+          })
             .then((response) => {
                 setPaperObject(response.data);
+
+                // Calculate remaining time based on paper duration (in hours)
+                const paperDurationHours = response.data.duration;
+                setRemainingTime(paperDurationHours * 3600); // Convert hours to seconds
             })
             .catch((error) => {
                 console.error('Error fetching paper:', error);
             });
 
-        axios.get(`http://localhost:5001/questions/${paperId}`)
+        axios.get(`http://localhost:5001/questions/${paperId}`, {
+            headers: {
+                Authorization: `${token}`
+            }
+          })
             .then((response) => {
                 setQuestions(response.data);
             })
@@ -41,31 +45,74 @@ function SingleExam() {
             });
     }, [paperId]);
 
+    useEffect(() => {
+        
+        const timer = setInterval(() => {
+            if (remainingTime > 0 && !isExamFinished) {
+                setRemainingTime(prevTime => prevTime - 1);
+            } else {
+                clearInterval(timer);
+            }
+        }, 1000);
+
+        return () => {
+            clearInterval(timer);
+        };
+    }, [remainingTime, isExamFinished]);
+
     const handleQuestionClick = (questionId) => {
-        history.push(`/answers-question/${paperId}/${questionId}`);
+        if (!isExamFinished) {
+            history.push(`/answers-question/${paperId}/${questionId}`);
+        }
     };
 
     const handleFinishPaper = () => {
-
-        history.push(`/examresult/${paperId}`);
+        if (!isExamFinished) {
+            setIsExamFinished(true);
+            history.push(`/examresult/${paperId}`);
+        }
     };
 
     return (
-        <div className="single-exam-container">
-            <div className="paper-subject">{paperObject.subject}</div>
-            <div className="question-list">
+        <div className="container single-exam-container">
+            <div className="paper-header text-center mt-4">
+                <h2>Exam: {paperObject.subject}</h2>
+                {remainingTime > 0 && (
+                    <p>
+                    Time Remaining: {formatTime(remainingTime)}
+                </p>
+                )}
+            </div>
+            <div className="question-list mt-4">
                 {questions.map((question, questionIndex) => (
-                    <div key={questionIndex} className="question-item">
-                        <div
-                            onClick={() => handleQuestionClick(question.questionId)}
-                            className="question-text"
-                        >{question.questionNo}. {question.question}</div>
+                    <div
+                        key={questionIndex}
+                        className={`question-item mb-3 p-3 shadow ${isExamFinished ? 'disabled' : ''}`}
+                        onClick={() => handleQuestionClick(question.questionId)}
+                    >
+                        <div className="question-text">
+                            <p>
+                                <strong>Question {question.questionNo}:</strong> {question.question}
+                            </p>
+                        </div>
                     </div>
                 ))}
             </div>
-            <button className="submit-button" onClick={handleFinishPaper}>Finish Paper</button>
+            <div className="d-flex justify-content-center mt-4">
+                <button className={`btn btn-primary ${isExamFinished ? 'disabled' : ''}`} onClick={handleFinishPaper}>
+                    Finish Exam
+                </button>
+            </div>
         </div>
     );
+}
+
+function formatTime(seconds) {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = seconds % 60;
+
+    return `${hours} hours ${minutes} minutes ${remainingSeconds} seconds`;
 }
 
 export default SingleExam;

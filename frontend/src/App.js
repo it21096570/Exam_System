@@ -1,4 +1,5 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Link, Switch, Route } from "react-router-dom";
 import "./App.css";
 import Home from "./pages/Home";
@@ -15,22 +16,36 @@ import SingleExamView from "./pages/SingleExam";
 import AnswersForQuestion from "./pages/AnswersForQuestion";
 import ExamResult from "./pages/ExamResult";
 import ViewExamTeacher from "./pages/ViewExamTeacher";
+import StudentNavBar from './components/StudentNavBar';
+import TeacherNavBar from './components/TeacherNavBar';
 
 
 
 function App() {
+
+  const [userRole, setUserRole] = useState(null);
+
+  useEffect(() => {
+    setUserRole(localStorage.getItem('role')  ? localStorage.getItem('role') : "");
+    //alert("alert 01" + userRole)
+
+  })
+
+  const handleBeforeUnload = () => {
+    // Clear the user data from localStorage when the browser is closed
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('role');
+  };
+
+
+
   return (
     <div className="App">
       <Router>
-        <nav>
-          {/* <ul>
-            <li>
-              <Link to="/home">Home</Link> <br />
-              <Link to="/register">Register</Link>
-              <Link to="/">Login</Link>
-            </li>
-          </ul> */}
-        </nav>
+
+        {userRole === 'Student' && <StudentNavBar />}
+        {userRole === 'Teacher' && <TeacherNavBar />}
+
         <Switch>
           <Route path="/home" component={Home} />
           <Route path="/register" component={Register} />
@@ -42,10 +57,16 @@ function App() {
           <Route path="/addquestion" component={AddQuestion} />
           <Route path="/addanswers" component={AddAnswers} />
           <Route path="/studentexamview" component={StudentExamView} />
-          <Route path="/single-exam/:paperId" component={SingleExamView}/>
+          <Route path="/single-exam/:paperId" component={SingleExamView} />
           <Route path="/answers-question/:paperId/:questionId" component={AnswersForQuestion} />
           <Route path="/examresult/:paperId" component={ExamResult} />
-          <Route path="/" component={Login} />
+
+
+          <Route
+            path="/"
+            render={(props) => <Login {...props} setUserRole={setUserRole} />}
+          /> 
+
         </Switch>
       </Router>
     </div>
@@ -53,3 +74,7 @@ function App() {
 }
 
 export default App;
+
+
+
+

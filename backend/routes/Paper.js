@@ -99,8 +99,6 @@ router.get("/latestPaperId",  validateToken, async (req, res) => {
 
         const teacherID = teacher.teacherId;
 
-        console.log("Teacher ID:", teacherID);
-
 
         const query = `
         SELECT MAX(paperId) AS latestPaperId
@@ -119,8 +117,6 @@ router.get("/latestPaperId",  validateToken, async (req, res) => {
 
         const latestPaperId = result.latestPaperId;
 
-
-        console.log("Latest PI", latestPaperId);
 
         res.json({ latestPaperId });
 

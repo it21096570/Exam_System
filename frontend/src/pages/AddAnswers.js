@@ -1,42 +1,46 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import '../css/addanswers.css';
+
 
 function AddAnswers() {
-
     const [questionId, setQuestionId] = useState('');
-    const [answer, setanswer] = useState('');
-    const [mark, setmark] = useState('');
-    const [status, setstatus] = useState('');
+    const [answer, setAnswer] = useState('');
+    const [mark, setMark] = useState('');
+    const [status, setStatus] = useState('');
 
     useEffect(() => {
-        async function fetchLatestQusetionId() {
-          try {
-    
-            const accessToken = localStorage.getItem('accessToken');
-    
-            const response = await axios.get('http://localhost:5001/question/latestQuestionId', {
-              headers: {
-                Authorization: `Bearer ${accessToken}`, // Send the token in the Authorization header
-              },
-            });
-    
-            const latestQuestionId = response.data.latestQuestionId;
-    
-            console.log("Latest Question ID:", latestQuestionId);
-    
-            setQuestionId(latestQuestionId);
-    
-          } catch (error) {
-            console.error('Error fetching latest Question ID:', error);
-          }
-        }
-    
-        fetchLatestQusetionId();
-      }, []);
+        
+        const token = localStorage.getItem('accessToken');
 
+        async function fetchLatestQuestionId() {
+            try {
+                const response = await axios.get('http://localhost:5001/answers/latestQuestionId', {
+                    headers: {
+                        Authorization: `${token}`
+                    }
+                });
+
+                const latestQuestionId = response.data.latestQuestionId;
+
+                console.log("Response:", response);
+                console.log("Latest Question ID:", latestQuestionId);
+
+                setQuestionId(latestQuestionId);
+
+            } catch (error) {
+                console.error('Error fetching latest Question ID:', error);
+            }
+        }
+
+        fetchLatestQuestionId();
+    }, []);
 
     const handleSubmit = async (event) => {
+
+        const token = localStorage.getItem('accessToken');
+
         event.preventDefault();
 
         const newAnswer = {
@@ -47,9 +51,15 @@ function AddAnswers() {
         };
 
         try {
-            await axios.post('http://localhost:5001/answers', newAnswer);
+            await axios.post('http://localhost:5001/answers', newAnswer, {
+                headers: {
+                    Authorization: `${token}`
+                }
+            });
+
             console.log('Answer added successfully');
             console.log(newAnswer);
+
         } catch (error) {
             console.error('Error adding Question:', error);
         }
@@ -57,76 +67,78 @@ function AddAnswers() {
 
     return (
         <div className="add-exam-container">
-            <h2>Add Answers</h2>
-            <form className="exam-form" onSubmit={handleSubmit}>
-                <label>
-                    Question ID:
-                    <input
-                        type="text"
-                        name="questionId"
-                        value={questionId}
-                        onChange={(e) => setQuestionId(e.target.value)}
-                    />
-                </label>
-                <br />
-                <label>
-                    Answer:
-                    <input
-                        type="text"
-                        name="answer"
-                        value={answer}
-                        onChange={(e) => setanswer(e.target.value)}
-                    />
-                </label>
+            <div className="add-exam-card">
+                <h2>Add Answers</h2>
+                <form className="exam-form" onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        <label htmlFor="questionId">Question ID:</label>
+                        <input
+                            type="text"
+                            id="questionId"
+                            name="questionId"
+                            value={questionId}
+                            onChange={(e) => setQuestionId(e.target.value)}
+                        />
+                    </div>
 
-                
-                <br />
+                    <div className="form-group">
+                        <label htmlFor="answer">Answer:</label>
+                        <input
+                            type="text"
+                            id="answer"
+                            name="answer"
+                            value={answer}
+                            onChange={(e) => setAnswer(e.target.value)}
+                        />
+                    </div>
 
-                <label>
-                    Marks:
-                    <input
-                        type="number"
-                        name="mark"
-                        value={mark}
-                        onChange={(e) => setmark(e.target.value)}
-                    />
-                </label>
-                <br />
+                    <div className="form-group">
+                        <label htmlFor="mark">Marks:</label>
+                        <input
+                            type="number"
+                            id="mark"
+                            name="mark"
+                            value={mark}
+                            onChange={(e) => setMark(e.target.value)}
+                        />
+                    </div>
 
-                <label>
-                    Status:
-                    <select
-                        name="status"
-                        value={status}
-                        onChange={(e) => setstatus(e.target.value)}>
-                        <option value="">Select Status</option>
-                        <option value="Correct">Correct</option>
-                        <option value="Wrong">Wrong</option>
-                    </select>
-                </label>
-                <br />
+                    <div className="form-group">
+                        <label htmlFor="status">Status:</label>
+                        <select
+                            id="status"
+                            name="status"
+                            value={status}
+                            onChange={(e) => setStatus(e.target.value)}>
+                            <option value="">Select Status</option>
+                            <option value="Correct">Correct</option>
+                            <option value="Wrong">Wrong</option>
+                        </select>
+                    </div>
 
-                <br />
-                <button className="add-exam-button" type="submit">Save</button>
-                <br />
+                    <div className="form-group">
+                        <button className="add-exam-button primary" type="submit">
+                            Save
+                        </button>
+                    </div>
 
-                {/* <Link to={`/addquestion?paperId=${paperId}`}>
-          <button className="add-exam-button" onClick={handleAddQuestions}>
-            Add Questions
-          </button>
-        </Link> */}
+                    <div className="form-group">
+                        <Link to="/addquestion">
+                            <button className="add-exam-button secondary">
+                                Add Question
+                            </button>
+                        </Link>
+                    </div>
 
-                <Link to={`/addquestion`}>
-                    <button className="add-exam-button">
-                        Add Question
-                    </button>
-                </Link>
-
-                <br />
-                <button className="add-exam-button" type="">Publish</button>
-            </form>
+                    <div className="form-group">
+                        <button className="add-exam-button danger" type="">
+                            Publish
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
-    )
+    );
 }
 
 export default AddAnswers

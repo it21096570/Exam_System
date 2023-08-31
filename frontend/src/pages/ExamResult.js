@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import '../css/examResult.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function ExamResult() {
     const [totalPoints, setTotalPoints] = useState(null);
@@ -10,11 +12,13 @@ function ExamResult() {
     const [questions, setQuestions] = useState([]);
 
     useEffect(() => {
+        const token = localStorage.getItem('accessToken');
+        
         axios.get(`http://localhost:5001/studentanswer/${paperId}`, {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                Authorization: `${token}`
             }
-        })
+          })
             .then(response => {
 
                 console.log("Data", response.data); // Check the entire response data
@@ -27,11 +31,13 @@ function ExamResult() {
     }, [paperId]);
 
     useEffect(() => {
+        const token = localStorage.getItem('accessToken');
+
         axios.get(`http://localhost:5001/studentanswer/byPaperId/${paperId}`, {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                Authorization: `${token}`
             }
-        })
+          })
             .then(response => {
 
                 console.log("Questions", response.data); // Check the questions array
@@ -48,54 +54,50 @@ function ExamResult() {
         if (totalPoints !== null) {
             if (totalPoints >= 0 && totalPoints <= 35) {
                 setGrade('W');
-                setPassFailStatus('Failed');
+                setPassFailStatus('FAILED');
             } else if (totalPoints > 35 && totalPoints <= 55) {
                 setGrade('D');
-                setPassFailStatus('Passed');
+                setPassFailStatus('PASSED');
             } else if (totalPoints > 55 && totalPoints <= 65) {
                 setGrade('C');
-                setPassFailStatus('Passed');
+                setPassFailStatus('PASSED');
             } else if (totalPoints > 65 && totalPoints <= 75) {
                 setGrade('B');
-                setPassFailStatus('Passed');
+                setPassFailStatus('PASSED');
             } else if (totalPoints > 75) {
                 setGrade('A');
-                setPassFailStatus('Passed');
+                setPassFailStatus('PASSED');
             }
         }
     }, [totalPoints]);
 
     return (
-        <div className="result-container">
-            <div className={`result-box ${passFailStatus.toLowerCase()}`}>
-                <p className={`pass-status ${passFailStatus.toLowerCase()}`}>
-                    {passFailStatus}
-                </p>
-                <p className='grade-containere'>{grade} - {totalPoints}</p>
+        <div className="container result-container">
+            <div className={`result-box ${passFailStatus.toLowerCase()} p-4 shadow`}>
+                <p className={`pass-status ${passFailStatus.toLowerCase()}`}>{passFailStatus}</p>
+                <p className="grade-container">{grade} - {totalPoints}</p>
             </div>
-            <div className="question-status">
-                <h2 className="questionStatus">Question Review</h2>
+            <div className="question-status mt-4">
+                
                 {questions.length > 0 && (
                     <QuestionList questions={questions} />
-                    
                 )}
-                <br/>
             </div>
         </div>
     );
-    
-
 }
 
 function QuestionList({ questions }) {
-    const questionItems = [];
-    for (let i = 0; i < questions.length; i++) {
-        questionItems.push(
-            <div className='status' key={i}>
-                Question {i + 1}: {questions[i].answerStatus}
-            </div>
-        );
-    }
-    return questionItems;
+    return (
+        <div className="question-list">
+            <h2 className="question-status">Question Review</h2>
+            {questions.map((question, index) => (
+                <div className={`status ${question.answerStatus.toLowerCase()}`} key={index}>
+                    Question {index + 1}: {question.answerStatus}
+                </div>
+            ))}
+        </div>
+    );
 }
+
 export default ExamResult;

@@ -112,6 +112,9 @@ export default AddQuestion;
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
+import '../css/addquestions.css';
+import '../css/add-exam.css';
+
 
 function AddQuestion() {
   const history = useHistory();
@@ -121,21 +124,21 @@ function AddQuestion() {
   const [question, setQuestion] = useState('');
 
   useEffect(() => {
+
+    const token = localStorage.getItem('accessToken');
+
     async function fetchLatestPaperId() {
       try {
-        const accessToken = localStorage.getItem('accessToken');
-
-        console.log(accessToken);
 
         const response = await axios.get('http://localhost:5001/paper/latestPaperId', {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
+            Authorization: `${token}`
+        }
         });
 
         const latestPaperId = response.data.latestPaperId;
 
-        console.log("Latest Paper ID:", latestPaperId);
+        console.log("Latest Paper ID --b :", latestPaperId);
 
         setPaperId(latestPaperId);
 
@@ -148,6 +151,9 @@ function AddQuestion() {
   }, []);
 
   const handleSubmit = async (event) => {
+
+    const token = localStorage.getItem('accessToken');
+
     event.preventDefault();
 
     const newQuestion = {
@@ -157,7 +163,12 @@ function AddQuestion() {
     };
 
     try {
-      await axios.post('http://localhost:5001/questions', newQuestion);
+      await axios.post('http://localhost:5001/questions', newQuestion, {
+        headers: {
+            Authorization: `${token}`
+        }
+      });
+      
       console.log('Question added successfully');
 
       history.push(`/addanswers/`);
@@ -171,46 +182,50 @@ function AddQuestion() {
 
   return (
     <div className="add-exam-container">
-      <h2>Add Question</h2>
-      <form className="exam-form" onSubmit={handleSubmit}>
-        <label>
-          Paper ID:
-          <input
-            type="text"
-            name="paperId"
-            value={paperId}
-            onChange={(e) => setPaperId(e.target.value)}
-          />
-        </label>
-        <br />
+      <div className="add-exam-card">
+        <h2>ADD QUESTIONS</h2>
+        <form className="exam-form" onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="paperId">Paper ID:</label>
+            <input
+              type="text"
+              id="paperId"
+              name="paperId"
+              value={paperId}
+              onChange={(e) => setPaperId(e.target.value)}
+            />
+          </div>
 
-        <label>
-          Question No:
-          <input
-            type="number"
-            name="questionNo"
-            value={questionNo}
-            onChange={(e) => setQuestionNo(e.target.value)}
-          />
-        </label>
-        <br />
+          <div className="form-group">
+            <label htmlFor="questionNo">Question No:</label>
+            <input
+              type="number"
+              id="questionNo"
+              name="questionNo"
+              value={questionNo}
+              onChange={(e) => setQuestionNo(e.target.value)}
+            />
+          </div>
 
-        <label>
-          Question:
-          <input
-            type="text"
-            name="question"
-            value={question}
-            onChange={(e) => setQuestion(e.target.value)}
-          />
-        </label>
-        <br />
+          <div className="form-group">
+            <label htmlFor="question">Question:</label>
+            <input
+              type="text"
+              id="question"
+              name="question"
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+            />
+          </div>
+          <br/>
 
-        <button className="add-exam-button" type="submit" onClick={handleSubmit}>
-          Add Answers
-        </button>
-        <br />
-      </form>
+          <div className="form-group">
+            <button className="add-exam-button primary" type="submit" onClick={handleSubmit}>
+              Add Answers
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

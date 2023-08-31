@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 
 
-function Login() {
+function Login(props) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
@@ -14,25 +14,36 @@ function Login() {
 
     const login = () => {
         const data = { username: username, password: password };
-        axios.post("http://localhost:5001/user/login", data)
-            .then((response) => {
-                if (response.data.error) {
-                    alert(response.data.error);
-                } else {
-                    localStorage.setItem("accessToken", response.data.accessToken);
-                    const role = response.data.role;
-                    const nic = response.data.nic;
+
+        axios.post("http://localhost:5001/user/login", data).then((response) => {
+
+            if (response.data.error) {
+                alert(response.data.error);
+
+            } else {
+
+                //localStorage.setItem("accessToken", response.data.accessToken);
+                const role = response.data.role;
+                const nic = response.data.nic;
+                const token = response.data.accessToken;
 
                 console.log(role);
+                console.log(nic);
 
                 axios.defaults.headers.common['accessToken'] = response.data.accessToken;
 
 
+                localStorage.setItem('accessToken', token);
+                localStorage.setItem('role', role);
 
                 if (role === "student" || role === "Student") {
+                    props.setUserRole(role);
                     history.push(`/studentexamview`);
+
                 } else if (role === "teacher" || role === "Teacher") {
-                    history.push("/teacherhome");
+                    props.setUserRole(role);
+                    history.push("/viewexamteacher");
+
                 } else {
                     history.push("/");
                 }
@@ -40,10 +51,10 @@ function Login() {
                 alert("Login successful!");
             }
         })
-        .catch((error) => {
-            console.error("Login error:", error);
-            alert("An error occurred during login.");
-        });
+            .catch((error) => {
+                console.error("Login error:", error);
+                alert("An error occurred during login.");
+            });
     };
 
     const Register = () => {
