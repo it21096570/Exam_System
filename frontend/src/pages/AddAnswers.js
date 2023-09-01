@@ -1,14 +1,47 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import '../css/addanswers.css';
 
 
 function AddAnswers() {
+    const history = useHistory();
+
+
+    const [paperId, setPaperId] = useState('');
     const [questionId, setQuestionId] = useState('');
     const [answer, setAnswer] = useState('');
     const [mark, setMark] = useState('');
     const [status, setStatus] = useState('');
+    
+
+    useEffect(() => {
+
+        const token = localStorage.getItem('accessToken');
+    
+        async function fetchLatestPaperId() {
+          try {
+    
+            const response = await axios.get('http://localhost:5001/paper/latestPaperId', {
+              headers: {
+                Authorization: `${token}`
+            }
+            });
+    
+            const latestPaperId = response.data.latestPaperId;
+    
+            console.log("Latest Paper ID --b :", latestPaperId);
+    
+            setPaperId(latestPaperId);
+    
+          } catch (error) {
+            console.error('Error fetching latest Paper ID:', error);
+          }
+        }
+    
+        fetchLatestPaperId();
+      }, []);
+
 
     useEffect(() => {
         
@@ -16,7 +49,7 @@ function AddAnswers() {
 
         async function fetchLatestQuestionId() {
             try {
-                const response = await axios.get('http://localhost:5001/answers/latestQuestionId', {
+                const response = await axios.get('http://localhost:5001/paper/latestQuestionId', {
                     headers: {
                         Authorization: `${token}`
                     }
@@ -58,10 +91,53 @@ function AddAnswers() {
             });
 
             console.log('Answer added successfully');
-            console.log(newAnswer);
+            alert('Answer added successfully');
 
         } catch (error) {
             console.error('Error adding Question:', error);
+        }
+    };
+
+    const handleSubmitAAQ = async (event) => {
+
+        
+            history.push('/addquestion')
+
+        
+    };
+
+    const handlePublish = async (event) => {
+        event.preventDefault();
+
+        const updatedPaper = {
+            status: 'Published',
+        };
+
+        const newAnswer = {
+            questionId,
+            answer,
+            mark,
+            status,
+        };
+
+        try {
+            const token = localStorage.getItem('accessToken');
+
+            await axios.post('http://localhost:5001/answers', newAnswer, {
+                headers: {
+                    Authorization: `${token}`
+                }
+            });
+
+            await axios.put(`http://localhost:5001/paper/${paperId}`, updatedPaper, {
+                headers: {
+                    Authorization: token
+                }
+            });
+            alert('Answer Added and Paper Published');
+
+        } catch (error) {
+            console.error('Error updating exam:', error);
         }
     };
 
@@ -123,15 +199,15 @@ function AddAnswers() {
                     </div>
 
                     <div className="form-group">
-                        <Link to="/addquestion">
-                            <button className="add-exam-button secondary">
-                                Add Question
+                        
+                            <button className="add-exam-button secondary" onClick={handleSubmitAAQ}>
+                                Add Another Question
                             </button>
-                        </Link>
+                        
                     </div>
 
                     <div className="form-group">
-                        <button className="add-exam-button danger" type="">
+                        <button className="add-exam-button danger" onClick={handlePublish}>
                             Publish
                         </button>
                     </div>

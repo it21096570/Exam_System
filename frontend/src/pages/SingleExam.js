@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useHistory } from 'react-router-dom';
-import '../css/singleExam.css'; // Import your custom CSS file for this component
+import '../css/singleExam.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function SingleExam() {
@@ -12,19 +12,19 @@ function SingleExam() {
 
     const history = useHistory();
     const { paperId } = useParams();
+    const loggedInUserId = localStorage.getItem('loggedInUserId');
 
     useEffect(() => {
         const token = localStorage.getItem('accessToken');
-        
+
+        // Load paper details
         axios.get(`http://localhost:5001/paper/byId/${paperId}`, {
             headers: {
                 Authorization: `${token}`
             }
-          })
+        })
             .then((response) => {
                 setPaperObject(response.data);
-
-                // Calculate remaining time based on paper duration (in hours)
                 const paperDurationHours = response.data.duration;
                 setRemainingTime(paperDurationHours * 3600); // Convert hours to seconds
             })
@@ -32,11 +32,12 @@ function SingleExam() {
                 console.error('Error fetching paper:', error);
             });
 
+        // Load questions
         axios.get(`http://localhost:5001/questions/${paperId}`, {
             headers: {
                 Authorization: `${token}`
             }
-          })
+        })
             .then((response) => {
                 setQuestions(response.data);
             })
@@ -46,17 +47,19 @@ function SingleExam() {
     }, [paperId]);
 
     useEffect(() => {
-        
+        // Start the timer and finish the paper when time is up
         const timer = setInterval(() => {
             if (remainingTime > 0 && !isExamFinished) {
                 setRemainingTime(prevTime => prevTime - 1);
-            } else {
-                clearInterval(timer);
+            } else if (!isExamFinished) {
+                setIsExamFinished(true);
+                clearInterval(timer); // Stop the timer
+                history.push(`/examresult/${paperId}`);
             }
         }, 1000);
 
         return () => {
-            clearInterval(timer);
+            clearInterval(timer); // Stop the timer when the component unmounts
         };
     }, [remainingTime, isExamFinished]);
 
@@ -79,8 +82,8 @@ function SingleExam() {
                 <h2>Exam: {paperObject.subject}</h2>
                 {remainingTime > 0 && (
                     <p>
-                    Time Remaining: {formatTime(remainingTime)}
-                </p>
+                        Time Remaining: {formatTime(remainingTime)}
+                    </p>
                 )}
             </div>
             <div className="question-list mt-4">

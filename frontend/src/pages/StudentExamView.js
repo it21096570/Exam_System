@@ -7,22 +7,25 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 function StudentExamView() {
+
     const [paperList, setPaperList] = useState([]);
     const history = useHistory();
     const location = useLocation();
 
+
     useEffect(() => {
         const token = localStorage.getItem('accessToken');
-        
+
         // Fetch paper data
         axios.get('http://localhost:5001/paper', {
             headers: {
                 Authorization: `${token}`
             }
-          })
+        })
             .then(response => {
 
                 console.log("Check Response : ", response.data);
+
                 setPaperList(response.data);
             })
             .catch(error => {
@@ -32,7 +35,7 @@ function StudentExamView() {
 
     const handlePaperClick = (paperId) => {
         const token = localStorage.getItem('accessToken');
-        
+
         // Redirect to SingleExam page with paperId as a parameter
         const data = {
             paperId: paperId,
@@ -45,7 +48,7 @@ function StudentExamView() {
             headers: {
                 Authorization: `${token}`
             }
-          })
+        })
             .then(response => {
                 console.log('Done!:', response.data);
                 // You can also update the UI to reflect the points earned or any other feedback
@@ -73,7 +76,7 @@ function StudentExamView() {
                                 >
                                     <div className="card-body">
                                         <h5 className="card-title">{paper.subject}</h5>
-                                        <p className="card-text">Date: {paper.date}</p>
+                                        
                                         <p className="card-text">Duration: {paper.duration} h</p>
                                         <p className="card-text">Status: {paper.status}</p>
                                     </div>

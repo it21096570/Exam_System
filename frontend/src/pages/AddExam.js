@@ -56,7 +56,7 @@ function AddExam() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="duration">Duration (minutes):</label>
+            <label htmlFor="duration">Duration (hours):</label>
             <input
               type="text"
               id="duration"
