@@ -41,7 +41,7 @@ router.post("/", validateToken, async (req, res) => {
 
         console.log("Paper created:", createdPaper);
 
-        res.json({ message: 'Paper submitted successfully', paper: createdPaper });
+        res.json({ message: 'Paper submitted successfully', paperId: createdPaper.paperId });
 
     } catch (error) {
         console.error('Error submitting Paper:', error);

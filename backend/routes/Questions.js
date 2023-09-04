@@ -19,7 +19,7 @@ router.get("/:paperId", validateToken, async (req, res) => {
 router.post("/", validateToken, async (req, res) => {
     const question = req.body;
     await Questions.create(question);
-    res.json('success');
+    res.json({message: 'success', questionId: question.questionId});
     
 });
 
