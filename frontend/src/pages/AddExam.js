@@ -9,6 +9,8 @@ function AddExam() {
   const [subject, setSubject] = useState('');
   const [duration, setDuration] = useState('');
   const [date, setDate] = useState('');
+  //const [questionExpansions, setQuestionExpansions] = useState([true]); // Initialize the first question as expanded
+  const [expandedQuestionIndex, setExpandedQuestionIndex] = useState(0);
   const [questions, setQuestions] = useState([
     {
       questionNumber: 1, // Start with question number 1
@@ -20,6 +22,9 @@ function AddExam() {
   const [paperId, setPaperId] = useState(null); // State to store the paperId
 
   const handleAddQuestion = () => {
+    //setQuestionExpansions((prevExpansions) => [...prevExpansions, false]);
+    setExpandedQuestionIndex(questions.length);
+    
     setQuestions((prevQuestions) => [
       ...prevQuestions,
       {
@@ -129,104 +134,7 @@ function AddExam() {
     }
   };
 
-  /* return (
-    <div className="add-exam-container">
-      <div className="add-exam-card">
-        <h2>ADD EXAM PAPER</h2>
-        <form className="exam-form" onSubmit={handleSave}>
-          <div className="form-group">
-            <label htmlFor="subject">Subject:</label>
-            <input
-              type="text"
-              id="subject"
-              name="subject"
-              value={subject}
-              onChange={(e) => setSubject(e.target.value)}
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="duration">Duration (hours):</label>
-            <input
-              type="text"
-              id="duration"
-              name="duration"
-              value={duration}
-              onChange={(e) => setDuration(e.target.value)}
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="date">Date:</label>
-            <input
-              type="date"
-              id="date"
-              name="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-            />
-          </div>
-
-          {questions.map((question, index) => (
-            <div key={index}>
-              <div className="form-group">
-                <label htmlFor={`question-${index}`}>Question {index + 1}:</label>
-                <input
-                  type="text"
-                  id={`question-${index}`}
-                  name={`question-${index}`}
-                  value={question.question}
-                  onChange={(e) => {
-                    const updatedQuestions = [...questions];
-                    updatedQuestions[index].question = e.target.value;
-                    setQuestions(updatedQuestions);
-                  }}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Answers:</label>
-                {question.answers.map((answer, answerIndex) => (
-                  <div key={answerIndex}>
-                    <input
-                      type="text"
-                      value={answer}
-                      onChange={(e) => {
-                        const updatedQuestions = [...questions];
-                        updatedQuestions[index].answers[answerIndex] = e.target.value;
-                        setQuestions(updatedQuestions);
-                      }}
-                    />
-                    <label>
-                      <input
-                        type="radio"
-                        name={`correct-answer-${index}`}
-                        checked={question.correctAnswerIndex === answerIndex}
-                        onChange={() => {
-                          const updatedQuestions = [...questions];
-                          updatedQuestions[index].correctAnswerIndex = answerIndex;
-                          setQuestions(updatedQuestions);
-                        }}
-                      />{' '}
-                      Correct
-                    </label>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-
-          <button type="button" onClick={handleAddQuestion}>
-            Add Question
-          </button>
-
-          <button className="add-exam-button primary" type="submit">
-            Save Exam, Questions, and Answers
-          </button>
-        </form>
-      </div>
-    </div>
-  ); */
+  
 
   return (
     <div className="add-exam-container">
@@ -269,66 +177,84 @@ function AddExam() {
       </div>
 
       <div className="questions-section">
-        <h2>Questions</h2>
-        {questions.map((question, index) => (
-          <div key={index} className="question-container">
-            <div className="form-group">
-              <label htmlFor={`question-${index}`}>Question {index + 1}:</label>
-              <input
-                type="text"
-                id={`question-${index}`}
-                name={`question-${index}`}
-                value={question.question}
-                onChange={(e) => {
-                  const updatedQuestions = [...questions];
-                  updatedQuestions[index].question = e.target.value;
-                  setQuestions(updatedQuestions);
+      <h2>Questions</h2>
+      {questions.map((question, index) => (
+        <div key={index} className="question-container">
+          <div className="form-group">
+            <label htmlFor={`question-${index}`}>Question {index + 1}:</label>
+            <input
+              type="text"
+              id={`question-${index}`}
+              name={`question-${index}`}
+              value={question.question}
+              onChange={(e) => {
+                const updatedQuestions = [...questions];
+                updatedQuestions[index].question = e.target.value;
+                setQuestions(updatedQuestions);
+              }}
+              style={{ width: '100%' }}
+            />
+          </div>
+          <div className="form-group">
+            <label>Answers:</label>
+            <div className="answers-toggle">
+              <button className='togglebutton'
+                type="button"
+                onClick={() => {
+                  // Toggle the visibility of answers for the current question
+                  setExpandedQuestionIndex(
+                    expandedQuestionIndex === index ? -1 : index
+                  );
                 }}
-                style={{ width: '100%' }} // Increase the width to 100%
-              />
+              >
+                {expandedQuestionIndex === index ? 'Hide Answers' : 'Show Answers'}
+              </button>
+              <br/>
+
             </div>
-            <div className="form-group">
-              <label>Answers:</label>
-              {question.answers.map((answer, answerIndex) => (
-                <div key={answerIndex} className="answer-container">
-                  <input
-                    type="text"
-                    value={answer}
-                    onChange={(e) => {
-                      const updatedQuestions = [...questions];
-                      updatedQuestions[index].answers[answerIndex] = e.target.value;
-                      setQuestions(updatedQuestions);
-                    }}
-                  />
-                  <label>
+            {expandedQuestionIndex === index && ( /* Display answers only if the question is expanded */
+              <>
+                {question.answers.map((answer, answerIndex) => (
+                  <div key={answerIndex} className="answer-container">
                     <input
-                      type="radio"
-                      name={`correct-answer-${index}`}
-                      checked={question.correctAnswerIndex === answerIndex}
-                      onChange={() => {
+                      type="text"
+                      value={answer}
+                      onChange={(e) => {
                         const updatedQuestions = [...questions];
-                        updatedQuestions[index].correctAnswerIndex = answerIndex;
+                        updatedQuestions[index].answers[answerIndex] = e.target.value;
                         setQuestions(updatedQuestions);
                       }}
-                    />{' '}
-                    Correct
-                  </label>
-                </div>
-              ))}
-            </div>
+                    />
+                    <label>
+                      <input
+                        type="radio"
+                        name={`correct-answer-${index}`}
+                        checked={question.correctAnswerIndex === answerIndex}
+                        onChange={() => {
+                          const updatedQuestions = [...questions];
+                          updatedQuestions[index].correctAnswerIndex = answerIndex;
+                          setQuestions(updatedQuestions);
+                        }}
+                      />{' '}
+                      Correct
+                    </label>
+                  </div>
+                ))}
+              </>
+            )}
           </div>
-        ))}
-        <button type="button" onClick={handleAddQuestion}>
-          Add Question
-        </button>
-      </div>
-
-
-      <button className="add-exam-button primary" type="submit" onClick={handleSave}>
-        Save Exam
+        </div>
+      ))}
+      <button type="button" onClick={handleAddQuestion} className='AddQuestionbutton'>
+        Add Question
       </button>
     </div>
-  );
+
+    <button className="add-exam-button primary" type="submit" onClick={handleSave}>
+      Save Exam
+    </button>
+  </div>
+);
 
 }
 

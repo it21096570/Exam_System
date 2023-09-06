@@ -16,6 +16,7 @@ import SingleExamView from "./pages/SingleExam";
 import AnswersForQuestion from "./pages/AnswersForQuestion";
 import ExamResult from "./pages/ExamResult";
 import ViewExamTeacher from "./pages/ViewExamTeacher";
+import QuestionView from "./pages/QuestionView";
 import StudentNavBar from './components/StudentNavBar';
 import TeacherNavBar from './components/TeacherNavBar';
 
@@ -60,6 +61,7 @@ function App() {
           <Route path="/single-exam/:paperId" component={SingleExamView} />
           <Route path="/answers-question/:paperId/:questionId" component={AnswersForQuestion} />
           <Route path="/examresult/:paperId" component={ExamResult} />
+          <Route path="/questionview/:paperId" component={QuestionView} />
 
 
           <Route

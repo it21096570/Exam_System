@@ -79,3 +79,29 @@ input[type="radio"] {
 .add-exam-button.primary:hover {
   background-color: #0056b3;
 }
+.togglebutton{
+  margin-bottom: 1%;
+  border-radius: 10px;
+  background-color: #6d0484;
+  border: 0px solid;
+  font-size: 10px;
+  width: 150px;
+  height: 20px;
+  color: white;
+}
+
+.togglebutton:hover{
+  background-color: #4b0559;
+}
+
+.AddQuestionbutton{
+  background-color: rgb(14, 207, 14);
+  border-radius: 5px;
+  border: 0px solid;
+  width: 150px;
+  height: 30px;
+}
+
+.AddQuestionbutton:hover{
+  background-color: rgb(13, 160, 13);
+}
