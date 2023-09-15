@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useHistory } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-import '../css/answersForQuestion.css'; // Import your custom CSS file
+import '../css/answersForQuestion.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function AnswersForQuestion() {

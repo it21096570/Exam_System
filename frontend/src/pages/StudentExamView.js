@@ -8,6 +8,7 @@ import QuestionView from './QuestionView'; // Import the QuestionView component
 function StudentExamView() {
   const [paperList, setPaperList] = useState([]);
   const [selectedPaperId, setSelectedPaperId] = useState(null); // To store the selected paperId
+  const [studentId, setStudentId] = useState('');
   const history = useHistory();
   const location = useLocation();
 
@@ -29,7 +30,25 @@ function StudentExamView() {
     });
   }, []);
 
-  const handlePaperClick = (paperId) => {
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+
+    // Fetch student id
+    axios.get('http://localhost:5001/paper/student', {
+      headers: {
+        Authorization: `${token}`
+      }
+    })
+      .then(response => {
+        console.log("Check Response: ", response.data);
+        setStudentId(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching paper data:', error);
+      });
+  }, []);
+
+  const handlePaperClick = (paperId, studentId) => {
     const token = localStorage.getItem('accessToken');
 
     // Set the selectedPaperId when a paper is clicked
@@ -38,7 +57,7 @@ function StudentExamView() {
     // Make an API request to save that the student is taking this paper
     const data = {
       paperId: paperId,
-      teacherName: "TestTeacher",
+      progressStatus: 'Not Complete',
     };
 
     axios.post('http://localhost:5001/stdpaper', data, {
@@ -48,13 +67,12 @@ function StudentExamView() {
     })
     .then(response => {
       console.log('Done!:', response.data);
-      // You can also update the UI to reflect that the student is taking the paper
     })
     .catch(error => {
       console.error('Error saving student paper:', error);
     });
 
-    history.push(`/questionview/${paperId}`);
+    history.push(`/doexam/${paperId}`);
   };
 
   return (
@@ -69,7 +87,7 @@ function StudentExamView() {
                 <div
                   key={paper.paperId}
                   className="card card-clickable"
-                  onClick={() => handlePaperClick(paper.paperId)}
+                  onClick={() => handlePaperClick(paper.paperId, studentId)}
                 >
                   <div className="card-body">
                     <h5 className="card-title">{paper.subject}</h5>
@@ -82,7 +100,6 @@ function StudentExamView() {
         </div>
       </div>
       
-      {/* Render the QuestionView component when a paper is selected */}
       {selectedPaperId && <QuestionView paperId={selectedPaperId} />}
     </div>
   );

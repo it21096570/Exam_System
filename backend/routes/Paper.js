@@ -1,14 +1,37 @@
 const express = require("express");
 const router = express.Router();
-const { Paper, Teacher, sequelize } = require("../models");
+const { Paper, Teacher, sequelize, Student } = require("../models");
 const { validateToken } = require("../middlewares/AuthMiddleware");
 
 
 
 
 router.get("/", validateToken, async (req, res) => {
-    const paperList = await Paper.findAll();
-    res.json(paperList);
+    
+        const paperList = await Paper.findAll();
+        res.json( paperList);
+});
+
+router.get("/student", validateToken, async (req, res) => {
+    try {
+        const studentNIC = req.user;
+        console.log("S NIC:", studentNIC);
+
+        const student = await Student.findOne({ where: { nic: studentNIC } });
+
+        if (!student) {
+            return res.status(404).json({ error: 'Teacher not found' });
+        }
+
+        const studentId = student.id;
+        console.log("student ID:", studentId);
+
+        res.json( studentId );
+
+    } catch (error) {
+        console.error('Student ID :', error);
+        res.status(500).json({ error: 'An error occurred while Student ID' });
+    }
 });
 
 router.get("/byId/:paperId", validateToken, async (req, res) => {
@@ -83,9 +106,9 @@ router.put("/:paperId", validateToken, async (req, res) => {
 });
 
 
-router.get("/latestPaperId",  validateToken, async (req, res) => {
+router.get("/latestPaperId", validateToken, async (req, res) => {
 
-    
+
     try {
 
         const teacherNIC = req.user;
@@ -130,37 +153,37 @@ router.get("/latestQuestionId", validateToken, async (req, res) => {
     try {
         const teacherNIC = req.user;
         console.log("Teacher NIC:", teacherNIC);
-    
+
         const teacher = await Teacher.findOne({ where: { nic: teacherNIC } });
         if (!teacher) {
             console.log('Teacher not found');
             return res.status(404).json({ error: 'Teacher not found' });
         }
-    
+
         const teacherID = teacher.teacherId;
         console.log("tID:", teacherID);
-    
+
         const query = `
         SELECT MAX(q.questionId) AS latestQuestionId
         FROM questions AS q
         INNER JOIN papers AS p ON q.paperId = p.paperId
         WHERE p.teacherId = :teacherId`;
-    
+
         const [result] = await sequelize.query(query, {
             replacements: { teacherId: teacherID },
             type: sequelize.QueryTypes.SELECT
         });
-    
+
         const latestQuestionId = result.latestQuestionId || null;
         console.log('Latest Question ID:', latestQuestionId);
-    
+
         res.json({ latestQuestionId });
-    
+
     } catch (error) {
         console.error('Error fetching latest Question ID:', error);
         res.status(500).json({ error: 'An error occurred while fetching the latest Question ID' });
     }
-    
+
 });
 
 module.exports = router;

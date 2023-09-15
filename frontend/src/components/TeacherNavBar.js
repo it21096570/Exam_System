@@ -14,6 +14,9 @@ function TeacherNavBar() {
     <nav className="teacher-nav">
       <ul className="nav-list">
         <li className="nav-item">
+          <Link to="/register" className="nav-link">Register</Link>
+        </li>
+        <li className="nav-item">
           <Link to="/viewexamteacher" className="nav-link">Exam List</Link>
         </li>
         <li className="nav-item">

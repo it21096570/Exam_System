@@ -7,6 +7,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 
 import axios from 'axios';
+import ViewExamAttend from './ViewExamAttend';
 
 function ViewExamTeacher() {
     const [paperList, setPaperList] = useState([]);
@@ -35,9 +36,24 @@ function ViewExamTeacher() {
             });
     }, []);
 
+    useEffect(() => {
+        // Filter papers based on the searchQuery
+        const filtered = paperList.filter(paper => {
+            const paperSubject = paper.subject.toLowerCase();
+            return paperSubject.includes(searchQuery.toLowerCase());
+        });
+        setFilteredPapers(filtered);
+    }, [searchQuery, paperList]);
+
     const onClick = (paperId) => {
         history.push(`/updateviewexam/${paperId}`);
     };
+
+    const ViewExamAttend = (paperId, subject) => {
+        history.push(`/examattend/${paperId}/${subject}`);
+    };
+
+
 
     return (
         <div className="view-exam-container">
@@ -68,7 +84,7 @@ function ViewExamTeacher() {
                     </tr>
                 </thead>
                 <tbody>
-                    {paperList.map(paper => (
+                    {filteredPapers.map(paper => (
                         <tr key={paper.paperId}>
                             <td>{paper.paperId}</td>
                             <td>{paper.subject}</td>
@@ -76,6 +92,11 @@ function ViewExamTeacher() {
                             <td>{paper.status}</td>
                             <td>
                                 <button className="btn btn-primary btn-action" onClick={() => onClick(paper.paperId)}>Update</button>
+
+                                <button className="btn btn-primary btn-action" onClick={() => ViewExamAttend(paper.paperId, paper.subject)}
+                                    style={{ marginLeft: '10px' }}>View Attendance
+                                </button>
+
                             </td>
                         </tr>
                     ))}
@@ -85,6 +106,6 @@ function ViewExamTeacher() {
     );
 }
 
-export default ViewExamTeacher
+export default ViewExamTeacher;
 
 

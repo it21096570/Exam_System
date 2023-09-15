@@ -80,6 +80,31 @@ function UpdateTeacherExam() {
         }
     };
 
+    const UnhandlePublish = async (event) => {
+        event.preventDefault();
+
+        const updatedPaper = {
+            subject,
+            allocatedMarks,
+            duration,
+            date,
+            status: 'Draft',
+        };
+
+        try {
+            const token = localStorage.getItem('accessToken');
+            await axios.put(`http://localhost:5001/paper/${paperId}`, updatedPaper, {
+                headers: {
+                    Authorization: token
+                }
+            });
+            alert('Exam updated and Published');
+            history.push('/viewexamteacher');
+        } catch (error) {
+            console.error('Error updating exam:', error);
+        }
+    };
+
     return (
         <div className="container mt-4">
             <div className="border-container">
@@ -127,7 +152,8 @@ function UpdateTeacherExam() {
                     </div>
                     <div className="col-12 mt-4">
                         <button className="btn btn-primary me-3" type="submit">Update</button>
-                        <button className="btn btn-success" type="button" onClick={handlePublish}>Publish</button>
+                        <button className="btn btn-success me-3" type="button" onClick={handlePublish}>Publish</button>
+                        <button className="btn btn-success" style={{backgroundColor:"red", border:"none"}}type="button" onClick={UnhandlePublish}>Unpublish</button>
                     </div>
                 </form>
             </div>

@@ -9,6 +9,18 @@ router.get("/", validateToken, async (req, res) => {
     res.json(studentList);
 });
 
+
+router.get("/total", validateToken, async (req, res) => {
+    try {
+        const studentCount = await Student.count();
+        res.json({ count: studentCount });
+    } catch (error) {
+        console.error('Error counting students:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+
 router.get("/:nic", validateToken, async (req, res) => {
     const nic = req.params.nic;
     const student = await Student.findAll({ where: { nic: nic } });

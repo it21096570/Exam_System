@@ -8,11 +8,14 @@ function StudentNavBar() {
     localStorage.clear();
 
     window.location.href = '/';
-}
+  }
 
   return (
     <nav className="student-nav">
       <ul className="nav-list">
+        <li className="nav-item">
+          <Link to="/register" className="nav-link">Register</Link>
+        </li>
         <li className="nav-item">
           <Link to="/studentexamview" className="nav-link">Exams</Link>
         </li>
