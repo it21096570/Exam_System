@@ -9,7 +9,7 @@ function AddExam() {
   const [subject, setSubject] = useState('');
   const [duration, setDuration] = useState('');
   const [date, setDate] = useState('');
-  //const [questionExpansions, setQuestionExpansions] = useState([true]); // Initialize the first question as expanded
+  //const [questionExpansions, setQuestionExpansions] = useState([true]);
   const [expandedQuestionIndex, setExpandedQuestionIndex] = useState(0);
   const [questions, setQuestions] = useState([
     {
@@ -90,7 +90,7 @@ function AddExam() {
             }
           );
 
-          console.log('Question Response:', questionResponse.data); // Log the question response
+          console.log('Question Response:', questionResponse.data); 
 
           const qresponse = await axios.get('http://localhost:5001/paper/latestQuestionId', {
             headers: {
@@ -107,7 +107,7 @@ function AddExam() {
           const answerDataArray = questionData.answers.map((answer, i) => ({
             questionId: latestQuestionId,
             answer,
-            mark: i + 1, // Assign marks (1, 2, 3, 4) to answers
+            mark: i + 1,
             status: i === questionData.correctAnswerIndex ? 'Correct' : 'Wrong',
           }));
 

@@ -3,11 +3,11 @@ import axios from 'axios';
 import { useHistory, useLocation } from 'react-router-dom';
 import '../css/studentExamView.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import QuestionView from './QuestionView'; // Import the QuestionView component
+import QuestionView from './QuestionView'; 
 
 function StudentExamView() {
   const [paperList, setPaperList] = useState([]);
-  const [selectedPaperId, setSelectedPaperId] = useState(null); // To store the selected paperId
+  const [selectedPaperId, setSelectedPaperId] = useState(null); 
   const [studentId, setStudentId] = useState('');
   const history = useHistory();
   const location = useLocation();
@@ -54,7 +54,6 @@ function StudentExamView() {
     // Set the selectedPaperId when a paper is clicked
     setSelectedPaperId(paperId);
 
-    // Make an API request to save that the student is taking this paper
     const data = {
       paperId: paperId,
       progressStatus: 'Not Complete',

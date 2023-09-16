@@ -1,24 +1,22 @@
-
-
 .card {
-  margin: 10px; /* Add space between cards */
-  border: 1px solid #ddd; /* Add border to cards */
-  transition: box-shadow 0.3s, background-color 0.3s; /* Add transitions for hover effects */
+  margin: 10px; 
+  border: 1px solid #ddd; 
+  transition: box-shadow 0.3s, background-color 0.3s; 
 }
 
 .card:hover {
-  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1); /* Add shadow on hover */
-  background-color: #aabcf6; /* Change background color on hover */
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1); 
+  background-color: #aabcf6; 
   transition: 0.5s;
   cursor: pointer;
 }
 
 .card-title {
-  font-size: 1.25rem; /* Increase font size for card title */
+  font-size: 1.25rem; 
 }
 
 .card-text {
-  font-size: 1rem; /* Increase font size for card text */
+  font-size: 1rem; 
 }
 
 .card-clickable {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import axios from 'axios';
 import '../css/DoExam.css';
@@ -13,8 +13,13 @@ function DoExam() {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [answers, setAnswers] = useState([]);
+    const [duration, setDuration] = useState(null);
+    const [timeLeft, setTimeLeft] = useState(null);
+    const [allQuestionsAnswered, setAllQuestionsAnswered] = useState(false);
+
 
     const history = useHistory();
+    const timerRef = useRef(null);
 
     // Fetch questions for the paperId
     useEffect(() => {
@@ -26,9 +31,30 @@ function DoExam() {
         })
             .then((response) => {
                 setQuestions(response.data);
+
             })
             .catch((error) => {
                 console.error('Error fetching questions:', error);
+            });
+    }, []);
+
+    useEffect(() => {
+
+        axios.get(`http://localhost:5001/paper/byId/${paperId}`, {
+            headers: {
+                Authorization: localStorage.getItem('accessToken')
+            }
+        })
+            .then((response) => {
+
+                const durationInSeconds = response.data.duration * 60 * 60; // Convert hours to seconds
+                setDuration(durationInSeconds);
+                setTimeLeft(durationInSeconds);
+                console.log("Duration : ", durationInSeconds);
+
+            })
+            .catch((error) => {
+                console.error('Error fetching paper:', error);
             });
     }, []);
 
@@ -52,12 +78,30 @@ function DoExam() {
         }
     }, [questions, currentQuestionIndex]);
 
-    // Handle next and previous buttons
-    const handleNext = () => {
-        if (currentQuestionIndex < questions.length - 1) {
-            setCurrentQuestionIndex(currentQuestionIndex + 1);
+    useEffect(() => {
+        if (duration !== null) {
+            timerRef.current = setInterval(() => {
+                setTimeLeft((prevTimeLeft) => prevTimeLeft - 1);
+            }, 1000);
         }
+    }, [duration]);
+
+    // Finish the paper when the time is up
+    useEffect(() => {
+        if (timeLeft === 0) {
+            clearInterval(timerRef.current);
+            handleFinishPaper();
+        }
+    }, [timeLeft]);
+
+    // Function to format time as "hours:minutes:seconds"
+    const formatTime = (timeInSeconds) => {
+        const hours = Math.floor(timeInSeconds / 3600);
+        const minutes = Math.floor((timeInSeconds % 3600) / 60);
+        const seconds = timeInSeconds % 60;
+        return `${hours}:${minutes}:${seconds}`;
     };
+
 
     const handlePrevious = () => {
         if (currentQuestionIndex > 0) {
@@ -101,6 +145,15 @@ function DoExam() {
                     .catch((error) => {
                         console.error('Error posting answer:', error);
                     });
+
+                if (currentQuestionIndex < questions.length - 1) {
+                    setCurrentQuestionIndex(currentQuestionIndex + 1);
+
+                } else {
+
+                    setAllQuestionsAnswered(true);
+                }
+
             } else {
                 // If it's wrong, add 0 points to the points column
                 axios.post('http://localhost:5001/studentanswer', {
@@ -113,21 +166,29 @@ function DoExam() {
                     headers: {
                         Authorization: localStorage.getItem('accessToken')
                     }
-                })
-                    .then((response) => {
-                        console.log("Success : ", response);
-                    })
-                    .catch((error) => {
-                        console.error('Error posting answer:', error);
-                    });
+                }).then((response) => {
+                    console.log("Success : ", response);
+                }).catch((error) => {
+                    console.error('Error posting answer:', error);
+                });
 
                 if (currentQuestionIndex < questions.length - 1) {
                     setCurrentQuestionIndex(currentQuestionIndex + 1);
+
+                } else {
+
+                    setAllQuestionsAnswered(true);
                 }
             }
         } else {
+
             alert('Select answer');
+
         }
+    };
+
+
+    const handleFinishPaper = () => {
 
         const data = {
             paperId: paperId,
@@ -146,54 +207,66 @@ function DoExam() {
                 console.error('Error marking paper as complete:', error);
             });
 
-        if (currentQuestionIndex < questions.length - 1) {
-            setCurrentQuestionIndex(currentQuestionIndex + 1);
-        }
-
-
-    };
-
-
-    const handleFinishPaper = () => {
+        clearInterval(timerRef.current);
         history.push(`/examresult/${paperId}`)
     };
 
     return (
-        <div style={{marginTop:"10%", width:"1000px"}} className="container">
-            <div className="row justify-content-center">
-                <div className="col-md-8">
-                    <div className="question mb-4">
-                        <p style={{fontSize:"40px", fontFamily:"initial"}}>{questions[currentQuestionIndex]?.question}</p>
+        <div style={{ backgroundColor: "" }}>
+            <div style={{ width: "250px", backgroundColor: "", marginTop: "2%", marginLeft: "2%", fontSize: "20px", fontFamily: "serif" }}>
+                {duration !== null && (
+                    <div className="duration">
+                        Time Remaining: {formatTime(timeLeft)}
                     </div>
-                    <div style={{fontSize:"20px", cursor: "pointer"}} className="answer">
-                        {answers.map((answer) => (
-                            <div className="form-check" key={answer.answerId}>
-                                <input
-                                    type="radio"
-                                    className="form-check-input"
-                                    name="answer"
-                                    value={answer.answerId}
-                                    onChange={() => handleSelectAnswer(answer.answerId)}
-                                    checked={selectedAnswer === answer.answerId}
-                                />
-                                <label className="form-check-label">{answer.answer}</label>
+                )}
+            </div>
+            <div style={{ marginTop: "10%", width: "100%", backgroundColor: "", border: "1px solid black", borderRadius:"15px"}} className="container">
+                <div className="row justify-content-center">
+                    <div style={{}} className="col-md-16">
+
+                        {allQuestionsAnswered ? (
+                            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+                                <p style={{ fontSize: "40px", fontFamily: "initial", backgroundColor: "" }}>
+                                    All are Done!
+                                </p>
                             </div>
-                        ))}
-                    </div>
-                    <div className="mt-4 text-center">
-                        <button className="btn btn-primary custom-width mr-3" onClick={handlePrevious}>Previous</button>
-                        <button className="btn btn-success custom-width ml-3" onClick={handleSubmitAnswer}>Submit Answer</button>
-                    </div>
-                    <div className="mt-4 text-center">
-                        <button className="btn btn-danger custom-width" onClick={handleFinishPaper}>Finish Paper</button>
+                        ) : (
+                            <>
+
+                                <div className="question mb-4">
+                                    <p style={{ fontSize: "40px", fontFamily: "initial" }}>
+                                        Question {currentQuestionIndex + 1}:{questions[currentQuestionIndex]?.question}
+                                    </p>
+                                </div>
+                                <div style={{ fontSize: "20px", cursor: "pointer" }} className="answer">
+                                    {answers.map((answer) => (
+                                        <div className="form-check" key={answer.answerId}>
+                                            <input
+                                                type="radio"
+                                                className="form-check-input"
+                                                name="answer"
+                                                value={answer.answerId}
+                                                onChange={() => handleSelectAnswer(answer.answerId)}
+                                                checked={selectedAnswer === answer.answerId}
+                                            />
+                                            <label className="form-check-label">{answer.answer}</label>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="mt-4 text-center">
+                                    <button className="btn btn-primary custom-width mr-3" onClick={handlePrevious}>Previous</button>
+                                    <button className="btn btn-success custom-width ml-3" onClick={handleSubmitAnswer}>Submit Answer</button>
+                                </div>
+                            </>
+                        )}
+                        <div className="mt-4 text-center">
+                            <button className="btn btn-danger custom-width" onClick={handleFinishPaper}>Finish Paper</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     );
-    
-    
-    
 
 }
 

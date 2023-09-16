@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../css/StudentNavBar.css'; // Import your CSS file
-
+import '../css/StudentNavBar.css';
 function StudentNavBar() {
 
   const logOut = () => {

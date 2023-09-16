@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useHistory, useLocation } from 'react-router-dom';
-import '../css/viewexamteacher.css'; // Create this CSS file for custom styles
+import '../css/viewexamteacher.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
 

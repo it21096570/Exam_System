@@ -23,9 +23,8 @@ function ExamResult() {
         })
             .then(response => {
 
-                console.log("Data", response.data); // Check the entire response data
+                console.log("Data", response.data); 
                 setTotalPoints(response.data.totalPoints);
-                // ... Determine grade based on totalPoints
             })
             .catch(error => {
                 console.error(error);
@@ -61,9 +60,8 @@ function ExamResult() {
         })
             .then(response => {
 
-                console.log("Questions", response.data); // Check the questions array
+                console.log("Questions", response.data); 
                 setQuestions(response.data);
-                // ... Determine grade based on totalPoints
             })
             .catch(error => {
                 console.error(error);
