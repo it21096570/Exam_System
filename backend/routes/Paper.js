@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { Paper, Teacher, sequelize, Student } = require("../models");
+const { Paper, Teacher, sequelize, Student, Questions, Answers } = require("../models");
 const { validateToken } = require("../middlewares/AuthMiddleware");
 
 
@@ -40,38 +40,6 @@ router.get("/byId/:paperId", validateToken, async (req, res) => {
     res.json(paper);
 });
 
-
-
-router.post("/", validateToken, async (req, res) => {
-    try {
-        const teacherNIC = req.user;
-        console.log("Teacher NIC:", teacherNIC);
-
-        const teacher = await Teacher.findOne({ where: { nic: teacherNIC } });
-
-        if (!teacher) {
-            return res.status(404).json({ error: 'Teacher not found' });
-        }
-
-        const teacherId = teacher.teacherId;
-        console.log("Teacher ID:", teacherId);
-
-        const teacherPaper = req.body;
-
-        teacherPaper.teacherId = teacherId;
-
-        const createdPaper = await Paper.create(teacherPaper);
-
-        console.log("Paper created:", createdPaper);
-
-        res.json({ message: 'Paper submitted successfully', paperId: createdPaper.paperId });
-
-    } catch (error) {
-        console.error('Error submitting Paper:', error);
-        res.status(500).json({ error: 'An error occurred while submitting the Paper' });
-    }
-});
-
 router.put("/:paperId", validateToken, async (req, res) => {
     try {
         const paperId = req.params.paperId;
@@ -106,11 +74,10 @@ router.put("/:paperId", validateToken, async (req, res) => {
 });
 
 
-router.get("/latestPaperId", validateToken, async (req, res) => {
 
 
+/* router.post("/", validateToken, async (req, res) => {
     try {
-
         const teacherNIC = req.user;
         console.log("Teacher NIC:", teacherNIC);
 
@@ -120,33 +87,30 @@ router.get("/latestPaperId", validateToken, async (req, res) => {
             return res.status(404).json({ error: 'Teacher not found' });
         }
 
-        const teacherID = teacher.teacherId;
+        const teacherId = teacher.teacherId;
+        console.log("Teacher ID:", teacherId);
 
+        const teacherPaper = req.body;
 
-        const query = `
-        SELECT MAX(paperId) AS latestPaperId
-        FROM papers
-        WHERE teacherId = :teacherId
-      `;
+        teacherPaper.teacherId = teacherId;
 
-        const [result] = await sequelize.query(query, {
-            replacements: { teacherId: teacherID },
-            type: sequelize.QueryTypes.SELECT
-        });
+        const createdPaper = await Paper.create(teacherPaper);
 
-        if (!result || !result.latestPaperId) {
-            return res.status(404).json({ error: 'No paper found' });
-        }
+        console.log("Paper created:", createdPaper);
 
-        const latestPaperId = result.latestPaperId;
-
-
-        res.json({ latestPaperId });
+        res.json({ message: 'Paper submitted successfully', paperId: createdPaper.paperId });
 
     } catch (error) {
-        console.error('Error fetching latest Paper ID:', error);
-        res.status(500).json({ error: 'An error occurred while fetching the latest Paper ID' });
+        console.error('Error submitting Paper:', error);
+        res.status(500).json({ error: 'An error occurred while submitting the Paper' });
     }
+});
+
+router.post("/questions", validateToken, async (req, res) => {
+    const question = req.body;
+    await Questions.create(question);
+    res.json({ message: 'success', questionId: question.questionId });
+
 });
 
 router.get("/latestQuestionId", validateToken, async (req, res) => {
@@ -185,6 +149,75 @@ router.get("/latestQuestionId", validateToken, async (req, res) => {
     }
 
 });
+
+router.post("/answers", validateToken, async (req, res) => {
+    const answer = req.body;
+    await Answers.create(answer);
+    res.json('success');
+});
+ */
+
+router.post('/fullExam', validateToken, async (req, res) => {
+
+    const { examData, questionsData } = req.body;
+
+    const teacherNIC = req.user;
+    console.log("Teacher NIC:", teacherNIC);
+
+    try {
+        // Step 1: Find the teacher by NIC
+        const teacher = await Teacher.findOne({ where: { nic: teacherNIC } });
+
+        if (!teacher) {
+            console.error('Teacher not found for NIC:', teacherNIC);
+            return res.status(400).json({ success: false, error: 'Teacher not found' });
+        }
+
+        const teacherId = teacher.teacherId;
+        console.log("Teacher ID:", teacherId);
+
+        // Add the teacherId to the examData before creating the Paper
+        examData.teacherId = teacherId;
+
+        // Step 2: Add exam details
+        const createdPaper = await Paper.create(examData);
+
+        // Check if the response contains a valid paperId
+        if (createdPaper.paperId) {
+            const paperId = createdPaper.paperId;
+
+            // Step 3: Add questions and answers
+            for (const questionData of questionsData) {
+                const createdQuestion = await Questions.create({
+                    paperId: paperId,
+                    questionNo: questionData.questionNo,
+                    question: questionData.question,
+                });
+
+                const questionId = createdQuestion.questionId;
+
+                // Create an array to store answer data for this question
+                const answerDataArray = questionData.answersData.map((answerData) => ({
+                    questionId: questionId,
+                    answer: answerData.answer,
+                    mark: answerData.mark,
+                    status: answerData.status,
+                }));
+
+                await Answers.bulkCreate(answerDataArray);
+            }
+
+            res.json({ success: true, message: 'Exam, questions, and answers added successfully' });
+        } else {
+            console.error('Invalid or missing paperId in the exam response:', examResponse);
+            res.status(400).json({ success: false, error: 'Invalid paperId in the exam response' });
+        }
+    } catch (error) {
+        console.error('Error adding exam, questions, and answers:', error);
+        res.status(500).json({ success: false, error: 'An error occurred while processing the batch data' });
+    }
+});
+
 
 module.exports = router;
 

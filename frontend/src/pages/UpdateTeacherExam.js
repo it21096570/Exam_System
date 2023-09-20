@@ -98,7 +98,7 @@ function UpdateTeacherExam() {
                     Authorization: token
                 }
             });
-            alert('Exam updated and Published');
+            alert('Exam updated and Unpublished');
             history.push('/viewexamteacher');
         } catch (error) {
             console.error('Error updating exam:', error);

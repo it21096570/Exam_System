@@ -24,7 +24,7 @@ function AddExam() {
   const handleAddQuestion = () => {
     //setQuestionExpansions((prevExpansions) => [...prevExpansions, false]);
     setExpandedQuestionIndex(questions.length);
-    
+
     setQuestions((prevQuestions) => [
       ...prevQuestions,
       {
@@ -36,7 +36,7 @@ function AddExam() {
     ]);
   };
 
-  const handleSave = async (event) => {
+  /* const handleSave = async (event) => {
     event.preventDefault();
 
     const token = localStorage.getItem('accessToken');
@@ -65,19 +65,9 @@ function AddExam() {
 
         // Step 2: Add questions and answers
         for (const questionData of questions) {
-          const response = await axios.get('http://localhost:5001/paper/latestPaperId', {
-            headers: {
-              Authorization: `${token}`
-            }
-          });
-
-          const latestPaperId = response.data.latestPaperId;
-
-          console.log("Latest Paper ID --b :", latestPaperId);
-
 
           const questionResponse = await axios.post(
-            'http://localhost:5001/questions',
+            'http://localhost:5001/paper/questions',
             {
               paperId: createdPaperId, // Use the created paperId
               questionNo: questionData.questionNumber,
@@ -114,7 +104,7 @@ function AddExam() {
           // Use Promise.all to send all answers for this question concurrently
           await Promise.all(
             answerDataArray.map(async (answerData) => {
-              await axios.post('http://localhost:5001/answers', answerData, {
+              await axios.post('http://localhost:5001/paper/answers', answerData, {
                 headers: {
                   Authorization: `${token}`,
                 },
@@ -132,9 +122,55 @@ function AddExam() {
     } catch (error) {
       console.error('Error adding exam, questions, and answers:', error);
     }
+  }; */
+
+  const handleSave = async (event) => {
+    event.preventDefault();
+
+    const token = localStorage.getItem('accessToken');
+
+    try {
+      // Create a single object to hold all the data
+      const batchData = {
+        examData: {
+          subject,
+          duration,
+          date,
+          status: 'Draft',
+        },
+        questionsData: questions.map((questionData, index) => ({
+          paperId: paperId, // Use the created paperId
+          questionNo: index + 1, // Auto-increment question number
+          question: questionData.question,
+          answersData: questionData.answers.map((answer, i) => ({
+            answer,
+            mark: i + 1,
+            status: i === questionData.correctAnswerIndex ? 'Correct' : 'Wrong',
+          })),
+        })),
+      };
+
+      const batchResponse = await axios.post('http://localhost:5001/paper/fullExam', batchData, {
+        headers: {
+          Authorization: `${token}`,
+        },
+      });
+
+      console.log('Batch Response:', batchResponse.data);
+
+      if (batchResponse.data.success) {
+        console.log('Exam, questions, and answers added successfully');
+        alert('Exam, questions, and answers added successfully');
+        history.push('/viewexamteacher');
+      } else {
+        console.error('Error adding exam, questions, and answers:', batchResponse.data.error);
+      }
+    } catch (error) {
+      console.error('Error adding exam, questions, and answers:', error);
+    }
   };
 
-  
+
 
   return (
     <div className="add-exam-container">
@@ -177,84 +213,84 @@ function AddExam() {
       </div>
 
       <div className="questions-section">
-      <h2>Questions</h2>
-      {questions.map((question, index) => (
-        <div key={index} className="question-container">
-          <div className="form-group">
-            <label htmlFor={`question-${index}`}>Question {index + 1}:</label>
-            <input
-              type="text"
-              id={`question-${index}`}
-              name={`question-${index}`}
-              value={question.question}
-              onChange={(e) => {
-                const updatedQuestions = [...questions];
-                updatedQuestions[index].question = e.target.value;
-                setQuestions(updatedQuestions);
-              }}
-              style={{ width: '100%' }}
-            />
-          </div>
-          <div className="form-group">
-            <label>Answers:</label>
-            <div className="answers-toggle">
-              <button className='togglebutton'
-                type="button"
-                onClick={() => {
-                  // Toggle the visibility of answers for the current question
-                  setExpandedQuestionIndex(
-                    expandedQuestionIndex === index ? -1 : index
-                  );
+        <h2>Questions</h2>
+        {questions.map((question, index) => (
+          <div key={index} className="question-container">
+            <div className="form-group">
+              <label htmlFor={`question-${index}`}>Question {index + 1}:</label>
+              <input
+                type="text"
+                id={`question-${index}`}
+                name={`question-${index}`}
+                value={question.question}
+                onChange={(e) => {
+                  const updatedQuestions = [...questions];
+                  updatedQuestions[index].question = e.target.value;
+                  setQuestions(updatedQuestions);
                 }}
-              >
-                {expandedQuestionIndex === index ? 'Hide Answers' : 'Show Answers'}
-              </button>
-              <br/>
-
+                style={{ width: '100%' }}
+              />
             </div>
-            {expandedQuestionIndex === index && ( /* Display answers only if the question is expanded */
-              <>
-                {question.answers.map((answer, answerIndex) => (
-                  <div key={answerIndex} className="answer-container">
-                    <input
-                      type="text"
-                      value={answer}
-                      onChange={(e) => {
-                        const updatedQuestions = [...questions];
-                        updatedQuestions[index].answers[answerIndex] = e.target.value;
-                        setQuestions(updatedQuestions);
-                      }}
-                    />
-                    <label>
+            <div className="form-group">
+              <label>Answers:</label>
+              <div className="answers-toggle">
+                <button className='togglebutton'
+                  type="button"
+                  onClick={() => {
+                    // Toggle the visibility of answers for the current question
+                    setExpandedQuestionIndex(
+                      expandedQuestionIndex === index ? -1 : index
+                    );
+                  }}
+                >
+                  {expandedQuestionIndex === index ? 'Hide Answers' : 'Show Answers'}
+                </button>
+                <br />
+
+              </div>
+              {expandedQuestionIndex === index && ( /* Display answers only if the question is expanded */
+                <>
+                  {question.answers.map((answer, answerIndex) => (
+                    <div key={answerIndex} className="answer-container">
                       <input
-                        type="radio"
-                        name={`correct-answer-${index}`}
-                        checked={question.correctAnswerIndex === answerIndex}
-                        onChange={() => {
+                        type="text"
+                        value={answer}
+                        onChange={(e) => {
                           const updatedQuestions = [...questions];
-                          updatedQuestions[index].correctAnswerIndex = answerIndex;
+                          updatedQuestions[index].answers[answerIndex] = e.target.value;
                           setQuestions(updatedQuestions);
                         }}
-                      />{' '}
-                      Correct
-                    </label>
-                  </div>
-                ))}
-              </>
-            )}
+                      />
+                      <label>
+                        <input
+                          type="radio"
+                          name={`correct-answer-${index}`}
+                          checked={question.correctAnswerIndex === answerIndex}
+                          onChange={() => {
+                            const updatedQuestions = [...questions];
+                            updatedQuestions[index].correctAnswerIndex = answerIndex;
+                            setQuestions(updatedQuestions);
+                          }}
+                        />{' '}
+                        Correct
+                      </label>
+                    </div>
+                  ))}
+                </>
+              )}
+            </div>
           </div>
-        </div>
-      ))}
-      <button type="button" onClick={handleAddQuestion} className='AddQuestionbutton'>
-        Add Question
+        ))}
+        <button type="button" onClick={handleAddQuestion} className='AddQuestionbutton'>
+          Add Question
+        </button>
+      </div>
+
+      <button className="add-exam-button primary" type="submit" onClick={handleSave}>
+        Save Exam
       </button>
     </div>
-
-    <button className="add-exam-button primary" type="submit" onClick={handleSave}>
-      Save Exam
-    </button>
-  </div>
-);
+  );
 
 }
 
