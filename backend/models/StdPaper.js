@@ -14,18 +14,6 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-        marks: {
-            type: DataTypes.INTEGER,
-            defaultValue: null,
-        },
-        grade: {
-            type: DataTypes.STRING(1),
-            defaultValue: null,
-        },
-        passFailStatus: {
-            type: DataTypes.ENUM('Pass', 'Fail'),
-            defaultValue: null,
-        },
         progressStatus: {
             type: DataTypes.ENUM('Complete', 'Not Complete'),
             defaultValue: null,
